@@ -1,0 +1,859 @@
+# Cool Professional Project Layout
+```
+social_app/
+│
+├── manage.py
+├── pyproject.toml
+├── uv.lock
+├── .env.dev
+├── .env.prod
+├── docker-compose.yml
+├── Dockerfile
+├── README.md
+│
+├── config/                   # Django project settings
+│   ├── __init__.py
+│   ├── settings/
+│   │   ├── base.py
+│   │   ├── dev.py
+│   │   └── prod.py
+│   ├── urls.py
+│   ├── wsgi.py
+│   └── asgi.py
+│
+├── apps/                     # Domain-driven Django apps
+│   ├── users/
+│   ├── groups/
+│   ├── posts/
+│   └── comments/
+│
+├── templates/                # Global templates
+│   └── base.html
+│
+├── static/                   # Collected static files
+├── media/                    # User uploads
+│
+├── tests/                    # Centralized tests
+│   ├── test_users.py
+│   ├── test_groups.py
+│   ├── test_posts.py
+│   └── test_comments.py
+│
+├── scripts/                  # Helper scripts
+│   ├── entrypoint.sh
+│   └── backup.sh
+│
+└── nginx/                    # Reverse proxy config
+    ├── nginx.conf            # Main config
+    └── default.conf          # Site config (proxy to Gunicorn)
+
+```
+
+
+# Cool Professional FrontEnd Project Layout
+```
+social_app/
+├── static_src/
+│   ├── sass/
+│   │   ├── base/
+│   │   │   ├── _variables.scss
+│   │   │   └── _typography.scss
+│   │   ├── layout/
+│   │   │   ├── _container.scss
+│   │   │   └── _header.scss
+│   │   ├── components/
+│   │   │   ├── _buttons.scss
+│   │   │   ├── _cards.scss
+│   │   │   └── _forms.scss
+│   │   ├── pages/
+│   │   │   └── _home.scss
+│   │   ├── vendor/
+│   │   │   └── _bootstrap.scss     # Bootstrap import wrapper
+│   │   └── main.scss
+│   └── js/
+│       ├── htmx_config.js
+│       └── bootstrap_init.js
+├── static/
+│   ├── css/
+│   │   └── main.css
+│   └── js/
+│       ├── htmx_config.js
+│       └── bootstrap_init.js
+└── package.json
+```
+
+# Cool Professional Complete Project Layout
+```
+social_app/
+│
+├── manage.py
+├── pyproject.toml
+├── uv.lock
+├── .env.dev
+├── .env.prod
+├── docker-compose.yml
+├── docker-compose.prod.yml
+├── Dockerfile
+├── Dockerfile.prod
+├── .gitignore
+├── .dockerignore
+├── README.md
+│
+├── config/                   # Django project settings
+│   ├── __init__.py
+│   ├── settings/
+│   │   ├── base.py
+│   │   ├── dev.py
+│   │   └── prod.py
+│   ├── urls.py
+│   ├── wsgi.py
+│   └── asgi.py
+│
+├── apps/                     # Domain-driven Django apps
+│   ├── users/
+│   ├── groups/
+│   ├── posts/
+│   └── comments/
+│
+├── templates/                # Global templates
+│   └── base.html
+│
+├── static/                   # Collected static files (Django collectstatic output)
+├── media/                    # User uploads
+│
+├── static_src/               # Frontend source (Sass, JS)
+│   ├── sass/
+│   │   ├── base/
+│   │   │   ├── _variables.scss
+│   │   │   └── _typography.scss
+│   │   ├── layout/
+│   │   │   ├── _container.scss
+│   │   │   └── _header.scss
+│   │   ├── components/
+│   │   │   ├── _buttons.scss
+│   │   │   ├── _cards.scss
+│   │   │   └── _forms.scss
+│   │   ├── pages/
+│   │   │   └── _home.scss
+│   │   ├── vendor/
+│   │   │   └── _bootstrap.scss
+│   │   └── main.scss
+│   └── js/
+│       ├── htmx_config.js
+│       └── bootstrap_init.js
+│
+├── tests/                    # Centralized tests
+│   ├── test_users.py
+│   ├── test_groups.py
+│   ├── test_posts.py
+│   └── test_comments.py
+│
+├── scripts/                  # Helper scripts
+│   ├── entrypoint.sh
+│   └── backup.sh
+│
+├── nginx/                    # Reverse proxy config
+│   ├── nginx.conf
+│   └── default.conf
+│
+└── package.json              # Frontend dependencies
+```
+
+Notes:-
+CMDS  [uv]:
+```
+- uv init
+- uv init --python 3.12
+- uv venv
+- source .venv/bin/activate
+- uv add django psycopg2-binary gunicorn
+- uv add --dev flake8
+```
+Notes:-
+"uv" automatically resolves conflicts:
+  - It looks at all 'version constraints' declared in your pyproject.toml.
+  - It computes a 'compatible set of packages' using its ultra‑fast resolver.
+  - If 'no compatible set exists', uv reports a conflict immediately (with clear error messages).
+  - Unlike Poetry, 'uv is designed to be extremely fast' and integrates seamlessly with modern Python packaging standards (PEP 621, PEP 508).
+  - uv maintains a 'lockfile (uv.lock)' to ensure reproducible installs across environments.
+
+CMDS  [python]:  [source: https://stackoverflow.com/questions/53835198/integrating-python-poetry-with-docker]
+```
+- python manage.py runserver --settings=config.settings.dev  [if "manage.py not changed"]
+- gunicorn config.wsgi:application --env DJANGO_SETTINGS_MODULE=config.settings.prod  [if modify wsgi,asgi: `gunicorn config.wsgi:application`]
+```
+Notes:-
+- When you split into base.py, dev.py, prod.py, you need to tell Django which one to use.
+- `--env is Gunicorn’s way of injecting that variable when starting the server.`
+- It’s an "environment variable" that "tells Django which settings file to use".  [DJANGO_SETTINGS_MODULE]
+
+CMDS  [Docker]:
+```
+- docker compose build
+- docker image prune
+- docker compose up -d
+- docker-compose logs -f
+- docker-compose up -d --build
+- docker compose exec web bash
+- docker compose exec web uv run python manage.py migrate --noinput
+- docker compose exec web uv run python manage.py flush --no-input
+- docker compose exec web uv run python manage.py collectstatic --no-input --clear
+- docker compose -f docker-compose.prod.yml exec web python manage.py showmigrations
+- docker compose exec db psql --username=config_django --dbname=config_django_prod
+- docker compose -f docker-compose.prod.yml exec db psql -U config_django -l
+- docker volume ls
+- docker volume inspect modern-social-app_postgres_data
+- docker build -f Dockerfile -t config_django:latest .
+- docker run -d \
+    -p 8006:8000 \
+    -e "SECRET_KEY=please_change_me" -e "DEBUG=1" -e "DJANGO_ALLOWED_HOSTS=*" \
+    config_django uv run python /usr/src/app/manage.py runserver 0.0.0.0:8000
+- docker ps
+- docker logs <container-id>
+- docker stop <container-id>
+- docker rm <container-id>
+- docker compose down
+- docker compose down -v
+- docker compose -f docker-compose.prod.yml up -d --build
+- docker compose build --no-cache web  [if you created ".dockerignore" after the "first build"]
+- docker compose -f docker-compose.prod down -v
+- docker compose exec web uv run python manage.py startapp upload
+- docker compose -f docker-compose.prod.yml exec web python manage.py startapp upload
+- docker compose exec web uv run python manage.py createsuperuser
+```
+Notes:-
+- "prune" deletes all <none> images not tagged or used by a container.
+- `docker compose exec web`: Open the web container, use Poetry’s virtualenv inside it, and run Django’s createsuperuser.
+
+## General Role of Mounts
+Notes:-
+- A "mount" "connects a path" "inside a container" to storage "outside the container".
+  This solves two big problems:
+> "Persistence"
+  - Container filesystems are ephemeral — they vanish when the container is removed.
+  - "Mounts let you keep data" ("databases", "uploads", "logs", "configs") across restarts.
+  - Example: "Postgres mounts" "/var/lib/postgresql/data" → your database survives container rebuilds.
+> "Sharing"
+  - Mounts let multiple containers access the same files.
+  - Example: "Django 'writes' static files into a volume", "Nginx 'reads' them from the same volume".
+  - Example: An app writes logs, a monitoring container reads them.
+
+CMDS  [scripts]:
+```
+- chmod +x scripts/entrypoint.dev.sh
+- chmod +x scripts/entrypoint.prod.sh
+- sudo chown -R $USER:$USER </path/to/project/>
+- sudo chown -R $USER:$USER /home/matyas/Documents/Python_Django_Flask/DjangoRoadMap/Upwork/Web_Dev_Senior/Social_Net_Apps/Modern-Social-App/
+```
+
+CMDS  [Nginx]  [https://docs.nginx.com/nginx/admin-guide/web-server/app-gateway-uwsgi-django/]:
+```
+# Uses uwsgi_pass → "Nginx" talks directly to a "uWSGI" server (instead of Gunicorn).
+
+http {
+    upstream django {
+        server 127.0.0.1:29000;
+    }
+    server {
+        listen 80;
+        server_name myapp.example.com;
+        location /main {
+            include     /etc/nginx/uwsgi_params;
+            uwsgi_pass  django;
+        }
+    }
+}
+```
+-------------------------
+```
+# Uses proxy_pass → "Nginx" forwards requests to "Gunicorn" (or another WSGI server) running on port 8000.
+
+upstream config_django {
+    server web:8000;
+}
+
+server {
+
+    listen 80;
+
+    location / {
+        proxy_pass http://config_django;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_redirect off;
+    }
+
+}
+```
+
+Notes:-
+- Even though "Nginx serves static files", "it doesn’t create them".
+  The "static files have to be collected by Django" into the "shared volume first".
+- When "Nginx" "looks in /usr/src/app/staticfiles" (its "own mount of static_volume"),
+  it finds nothing → "404 errors".
+
+
+## --------------- Flow Of The Project --------------- ##
+Notes:-
+1. Project Setup
+2. updates settings directory  [manage.py, wsgi.py, asgi.py]
+3. UV Setup
+4. Docker Setup  [no "entrypoint"]
+5. Docker-Compose Setup  [no "db" services]
+6. env variables Setup  [no "postgresql"]
+7. Docker-Compose Setup  [yes "db" services]
+8. env variable Setup  [yes "postgresql"]
+9. Docker Setup  [yes "entrypoint"] [yes "flush, migrate"]
+10. Test manually  [using `docker build...`]
+11. update entrypoint  [comment "flush, migrate"]
+12. docker-compose.prod.yml  [no "nginx"]
+
+-------------------------
+## "Dockerfile"  [I]:
+```
+FROM python:3.12-slim-bullseye
+
+WORKDIR /usr/src/app
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+  PYTHONUNBUFFERED=1
+
+RUN apt-get update && \
+  apt-get install -y netcat-traditional \
+  curl && \
+  rm -rf /var/lib/apt/lists/*
+
+RUN curl -sSL https://install.python-poetry.org | python3 -
+ENV PATH="/root/.local/bin:$PATH"
+
+COPY poetry.lock pyproject.toml ./
+
+RUN uv sync --no-root
+
+COPY . .
+```
+-------------------------
+## "Dockerfile"  [II]:
+```
+FROM python:3.12-slim-bullseye
+
+WORKDIR /usr/src/app
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+  PYTHONUNBUFFERED=1
+
+RUN apt-get update && \
+  apt-get install -y netcat-traditional \
+  curl && \
+  rm -rf /var/lib/apt/lists/*
+
+RUN curl -sSL https://install.python-poetry.org | python3 -
+ENV PATH="/root/.local/bin:$PATH"
+
+COPY poetry.lock pyproject.toml ./
+
+RUN uv sync --no-root
+
+COPY scripts/ ./scripts/
+RUN sed -i 's/\r$//g' /usr/src/app/scripts/entrypoint.dev.sh && \
+  chmod +x /usr/src/app/scripts/entrypoint.dev.sh
+
+COPY . .
+
+ENTRYPOINT ["/usr/src/app/scripts/entrypoint.dev.sh"]
+```
+
+-------------------------
+## "Dockerfile.prod"  [I]:
+```
+FROM python:3.12-slim-bullseye
+
+WORKDIR /usr/src/app
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+  PYTHONUNBUFFERED=1
+
+RUN apt-get update && \
+  apt-get install -y netcat-traditional \
+  curl && \
+  rm -rf /var/lib/apt/lists/*
+
+RUN curl -sSL https://install.python-poetry.org | python3 -
+ENV PATH="/root/.local/bin:$PATH"
+
+ENV POETRY_VIRTUALENVS_IN_PROJECT=true
+
+COPY poetry.lock pyproject.toml ./
+
+RUN uv sync --no-root
+ENV PATH="/usr/src/app/.venv/bin:$PATH"
+
+COPY scripts/ ./scripts/
+RUN sed -i 's/\r$//g' /usr/src/app/scripts/entrypoint.prod.sh && \
+  chmod +x /usr/src/app/scripts/entrypoint.prod.sh
+
+COPY . .
+
+ENTRYPOINT ["/usr/src/app/scripts/entrypoint.prod.sh"]
+```
+
+-------------------------
+## Dockerfile.prod  [II]:
+```
+###########
+# BUILDER #
+###########
+FROM python:3.12-slim-bullseye as builder
+
+WORKDIR /usr/src/app
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+  PYTHONUNBUFFERED=1 \
+  POETRY_VIRTUALENVS_CREATE=false \
+  PATH="/root/.local/bin:$PATH"
+
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends gcc \
+  build-essential \
+  curl && \
+  rm -rf /var/lib/apt/lists/*
+
+RUN curl -sSL https://install.python-poetry.org | python3 -
+
+COPY pyproject.toml poetry.lock ./
+
+RUN uv sync --no-root
+
+#########
+# FINAL #
+#########
+FROM python:3.12-slim-bullseye
+
+ENV APP_HOME=/usr/src/app
+RUN mkdir $APP_HOME
+
+ENV PYTHONUNBUFFERED=1 \
+  PATH="/root/.local/bin:$PATH"
+
+RUN addgroup --system app && adduser --system --group app
+
+RUN apt-get update && apt-get install -y --no-install-recommends netcat-traditional && \
+  rm -rf /var/lib/apt/lists/*
+
+WORKDIR $APP_HOME
+
+COPY . .
+
+COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
+
+COPY scripts/entrypoint.prod.sh $APP_HOME/scripts/entrypoint.prod.sh
+RUN sed -i 's/\r$//g' $APP_HOME/scripts/entrypoint.prod.sh && \
+  chmod +x $APP_HOME/scripts/entrypoint.prod.sh
+
+RUN chown -R app:app $APP_HOME
+
+USER app
+
+ENTRYPOINT ["/usr/src/app/scripts/entrypoint.prod.sh"]
+```
+
+-------------------------
+## Dockerfile.prod  [III]:
+```
+###########
+# BUILDER #
+###########
+FROM python:3.12-slim-bullseye as builder
+
+WORKDIR /usr/src/app
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+  PYTHONUNBUFFERED=1 \
+  POETRY_VIRTUALENVS_CREATE=false \
+  PATH="/root/.local/bin:$PATH"
+
+RUN apt-get update && \
+  apt-get install -y --no-install-recommends gcc \
+  build-essential \
+  curl && \
+  rm -rf /var/lib/apt/lists/*
+
+RUN curl -sSL https://install.python-poetry.org | python3 -
+
+COPY pyproject.toml poetry.lock ./
+
+RUN uv sync --no-root
+
+#########
+# FINAL #
+#########
+FROM python:3.12-slim-bullseye
+
+ENV APP_HOME=/usr/src/app
+RUN mkdir $APP_HOME
+
+ENV PYTHONUNBUFFERED=1 \
+  PATH="/root/.local/bin:$PATH"
+
+RUN addgroup --system app && adduser --system --group app
+
+RUN mkdir $APP_HOME/staticfiles  # new
+RUN mkdir $APP_HOME/mediafiles  # new
+
+RUN apt-get update && apt-get install -y --no-install-recommends netcat-traditional && \
+  rm -rf /var/lib/apt/lists/*
+
+WORKDIR $APP_HOME
+
+COPY . .
+
+COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+COPY --from=builder /usr/local/bin /usr/local/bin
+
+COPY scripts/entrypoint.prod.sh $APP_HOME/scripts/entrypoint.prod.sh
+RUN sed -i 's/\r$//g' $APP_HOME/scripts/entrypoint.prod.sh && \
+  chmod +x $APP_HOME/scripts/entrypoint.prod.sh
+
+RUN chown -R app:app $APP_HOME
+
+USER app
+
+ENTRYPOINT ["/usr/src/app/scripts/entrypoint.prod.sh"]
+```
+
+-------------------------
+## "docker-compose.yml"  [I]:
+```
+services:
+  web:
+    build: .
+    command: uv run python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/usr/src/app/
+    ports:
+      - 8000:8000
+    env_file:
+      - .env.dev
+```
+-------------------------
+## "docker-compose.yml"  [II]:
+```
+services:
+  web:
+    build: .
+    command: uv run python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/usr/src/app/
+    ports:
+      - 8000:8000
+    env_file:
+      - .env.dev
+    depends_on:
+      - db
+  db:
+    image: postgres:15
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=config_django
+      - POSTGRES_PASSWORD=config_django
+      - POSTGRES_DB=config_django_dev
+
+volumes:
+  postgres_data:
+```
+
+-------------------------
+## "docker-compose.prod.yml"  [I]:
+```
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    env_file:
+      - .env.prod
+    depends_on:
+      - db
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env.prod.db
+
+volumes:
+  postgres_data:
+```
+
+-------------------------
+## docker-compose.prod.yml  [II]:
+```
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+
+    # ports:  # To test only for gunicorn (without Nginx)
+    #   - 8000:8000
+
+    expose:
+      - 8000
+    env_file:
+      - .env.prod
+    depends_on:
+      - db
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env.prod.db
+  nginx:
+    build: ./nginx
+    ports:
+      - 1337:80
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
+```
+
+-------------------------
+## docker-compose.prod.yml  [III]:
+```
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+
+    # ports:  # To test only for gunicorn (without Nginx)
+    #   - 8000:8000
+
+    expose:
+      - 8000
+    env_file:
+      - .env.prod
+    depends_on:
+      - db
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env.prod.db
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/home/app/web/staticfiles
+    ports:
+      - 1337:80
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
+  static_volume:
+```
+
+-------------------------
+## docker-compose.prod.yml  [IV]:
+```
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - static_volume:/usr/src/app/staticfiles
+      - media_volume:/home/app/web/mediafiles
+
+    # ports:  # To test only for gunicorn (without Nginx)
+    #   - 8000:8000
+
+    expose:
+      - 8000
+    env_file:
+      - .env.prod
+    depends_on:
+      - db
+  db:
+    image: postgres:15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env.prod.db
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/usr/src/app/staticfiles
+      - media_volume:/home/app/web/mediafiles
+    ports:
+      - 1337:80
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
+```
+
+-------------------------
+## config/urls.py:
+```
+from django.contrib import admin
+from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
+
+from upload.views import image_upload
+
+urlpatterns = [
+    path("", image_upload, name="upload"),
+    path('admin/', admin.site.urls),
+]
+
+if bool(settings.DEBUG):
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+```
+
+## nginx.conf:
+```
+upstream config_django {
+    server web:8000;
+}
+
+server {
+
+    listen 80;
+
+    location / {
+        proxy_pass http://config_django;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_redirect off;
+
+        client_max_body_size 100M;
+    }
+
+    location /static/ {
+      alias /usr/src/app/staticfiles/;
+    }
+
+    location /media/ {
+        alias /home/app/web/mediafiles/;
+    }
+
+}
+```
+
+## Modern nginx.conf:
+```
+upstream django {
+    server web:8000;
+}
+
+server {
+    listen 80;
+    server_name 127.0.0.1 localhost;
+
+    # Best practice headers
+    proxy_set_header Host $http_host;  # Preserve original Host header
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-Port $server_port;  # Dynamic port
+
+    location / {
+        proxy_pass http://django;
+        proxy_redirect off;
+        client_max_body_size 100M;
+    }
+
+    location /static/ {
+        alias /usr/src/app/staticfiles/;
+        expires 1y;
+        add_header Cache-Control "public, immutable";
+    }
+
+    location /media/ {
+        alias /usr/src/app/mediafiles/;
+        expires 30d;
+        add_header Cache-Control "public";
+    }
+}
+```
+
+
+# -------------------- Modern Django Environment Configuration -------------------- #
+## Individual Environment Variables (Your Current Way)
+.env:
+```
+SQL_ENGINE=django.db.backends.postgresql
+SQL_DATABASE=config_django_prod
+SQL_USER=config_django
+SQL_PASSWORD=config_django
+SQL_HOST=db
+SQL_PORT=5432
+```
+
+## DATABASE_URL (More Modern)
+.env
+```
+- DATABASE_URL=postgresql://user:pass@db:5432/dbname
+- DATABASE_URL=postgresql://config_django:config_django@db:5432/config_django_prod
+```
+or
+```
+  environment:
+    - DEBUG=0
+    - SECRET_KEY=actual-secret-key-here
+    - DJANGO_ALLOWED_HOSTS=example.com
+    - DATABASE_URL=postgresql://user:pass@db:5432/dbname
+```
+
+settings.py:
+```
+  import environ
+  from pathlib import Path
+
+  env = environ.Env()
+
+  BASE_DIR = Path(__file__).resolve().parent.parent
+
+  environ.Env.read_env(BASE_DIR / '.env')
+
+  - DEBUG = env.bool('DEBUG', False)
+  - SECRET_KEY = env('SECRET_KEY')
+  - ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[])
+
+  - DATABASES = {
+      'default': env.db('DATABASE_URL')
+    }
+
+  - CACHES = {
+      'default': env.cache('CACHE_URL', default='locmemcache://')
+    }
+```
+.env:
+```
+  - DEBUG=True
+  - SECRET_KEY=your-secret-key
+  - ALLOWED_HOSTS=localhost,127.0.0.1,.yourdomain.com
+  - DATABASE_URL=postgresql://user:pass@localhost:5432/dbname
+  - CACHE_URL=redis://localhost:6379/0
+```
