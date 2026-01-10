@@ -17,6 +17,8 @@ INSTALLED_APPS = [
 
     # Local apps
     'apps.core.apps.CoreConfig',
+    'apps.post.apps.PostConfig',
+    'apps.group.apps.GroupConfig',
 ]
 
 MIDDLEWARE = [

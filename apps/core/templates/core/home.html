@@ -3,6 +3,19 @@
 
 {% block title %}Feed | Social App{% endblock %}
 
+<style>
+    .htmx-indicator {
+        opacity: 0;
+        visibility: hidden;
+    }
+    .htmx-request .htmx-indicator,
+    .htmx-request.htmx-indicator {
+        opacity: 1;
+        visibility: visible;
+        transition: opacity 200ms ease-in;
+    }
+</style>
+
 {% block content %}
 <div class="row align-items-start">
 
@@ -29,106 +42,14 @@
           </div>
         </div>
 
-        <div class="bg-white rounded-5 p-3 mt-4">
-          <div class="d-flex align-items-center py-2">
-            <img src="{% static 'assets/Group 8.png' %}" alt="">
-            <div class="ps-3">
-              <h3 class="h5 mb-0">George Lobko</h3>
-              <p class="text-muted small mb-0">2 hours ago</p>
-            </div>
-          </div>
-
-          <p>
-            Hi everyone, today I was on the most beautiful mountain in the world ⛰️.
-          </p>
-
-          <div class="post-gallery">
-            <img class="post-images" src="{% static 'assets/rod-long-liGPSuWK4ek-unsplash 1.png' %}" alt="">
-            <img class="post-images" src="{% static 'assets/national-gallery-of-art-co_X9D0SgRo-unsplash 1.png' %}" alt="">
-            <img class="post-images" src="{% static 'assets/rod-long-liGPSuWK4ek-unsplash 1.png' %}" alt="">
-          </div>
-
-          <div class="border-top d-flex mt-3 pt-2">
-            <div class="px-2 d-flex align-items-center gap-1">
-              6355 <img src="{% static 'assets/eye-24-outlined.svg' %}" alt="">
-            </div>
-            <div class="px-2 d-flex align-items-center gap-1">
-              <img src="{% static 'assets/thumbs-up-24-outlined.svg' %}" alt="">
-              Like
-            </div>
-            <div class="px-2 d-flex align-items-center gap-1">
-              <img src="./static/assets/rocketchat-24-outlined.svg" alt="">
-              Comment
-            </div>
-          </div>
+        <div id="post-list">
+          {% include 'core/partials/home.html' %}
         </div>
 
-        <div class="bg-white rounded-5 p-3 mt-4">
-          <div class="d-flex align-items-center py-2">
-            <img src="{% static 'assets/Group 8.png' %}" alt="">
-            <div class="ps-3">
-              <h3 class="h5 mb-0">George Lobko</h3>
-              <p class="text-muted small mb-0">2 hours ago</p>
+        <div class="d-flex justify-content-center my-4">
+            <div id="spinner" class="spinner-border htmx-indicator" role="status">
+                <span class="visually-hidden">Loading...</span>
             </div>
-          </div>
-
-          <p>
-            Hi everyone, today I was on the most beautiful mountain in the world ⛰️.
-          </p>
-
-          <div class="post-gallery">
-            <img class="post-images" src="{% static 'assets/rod-long-liGPSuWK4ek-unsplash 1.png' %}" alt="">
-            <img class="post-images" src="{% static 'assets/national-gallery-of-art-co_X9D0SgRo-unsplash 1.png' %}" alt="">
-            <img class="post-images" src="{% static 'assets/rod-long-liGPSuWK4ek-unsplash 1.png' %}" alt="">
-          </div>
-
-          <div class="border-top d-flex mt-3 pt-2">
-            <div class="px-2 d-flex align-items-center gap-1">
-              6355 <img src="{% static 'assets/eye-24-outlined.svg' %}" alt="">
-            </div>
-            <div class="px-2 d-flex align-items-center gap-1">
-              <img src="{% static 'assets/thumbs-up-24-outlined.svg' %}" alt="">
-              Like
-            </div>
-            <div class="px-2 d-flex align-items-center gap-1">
-              <img src="./static/assets/rocketchat-24-outlined.svg" alt="">
-              Comment
-            </div>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-5 p-3 mt-4">
-          <div class="d-flex align-items-center py-2">
-            <img src="{% static 'assets/Group 8.png' %}" alt="">
-            <div class="ps-3">
-              <h3 class="h5 mb-0">George Lobko</h3>
-              <p class="text-muted small mb-0">2 hours ago</p>
-            </div>
-          </div>
-
-          <p>
-            Hi everyone, today I was on the most beautiful mountain in the world ⛰️.
-          </p>
-
-          <div class="post-gallery">
-            <img class="post-images" src="{% static 'assets/rod-long-liGPSuWK4ek-unsplash 1.png' %}" alt="">
-            <img class="post-images" src="{% static 'assets/national-gallery-of-art-co_X9D0SgRo-unsplash 1.png' %}" alt="">
-            <img class="post-images" src="{% static 'assets/rod-long-liGPSuWK4ek-unsplash 1.png' %}" alt="">
-          </div>
-
-          <div class="border-top d-flex mt-3 pt-2">
-            <div class="px-2 d-flex align-items-center gap-1">
-              6355 <img src="{% static 'assets/eye-24-outlined.svg' %}" alt="">
-            </div>
-            <div class="px-2 d-flex align-items-center gap-1">
-              <img src="{% static 'assets/thumbs-up-24-outlined.svg' %}" alt="">
-              Like
-            </div>
-            <div class="px-2 d-flex align-items-center gap-1">
-              <img src="./static/assets/rocketchat-24-outlined.svg" alt="">
-              Comment
-            </div>
-          </div>
         </div>
 
     </div>
