@@ -13,6 +13,7 @@ node_modules/
 
 # Django
 db.sqlite3
+static/
 media/
 staticfiles/
 mediafiles/
@@ -28,4 +29,5 @@ mediafiles/
 
 # Env files (keep secrets out of Git)
 .env
-.env.*
+.env.dev
+.env.prod

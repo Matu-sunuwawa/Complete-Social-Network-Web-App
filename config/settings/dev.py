@@ -19,8 +19,6 @@ CACHES = {
     }
 }
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost:1337", "http://127.0.0.1:1337"]
-
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 if DEBUG:
@@ -29,3 +27,21 @@ if DEBUG:
     ]
     MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
     INTERNAL_IPS = ['127.0.0.1']
+
+    # Solution One:
+    # import socket
+    # hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    # INTERNAL_IPS += [ip[: ip.rfind(".")] + ".1" for ip in ips]
+
+    # Solution Two:
+    # def show_toolbar(request):
+    #     return True
+
+    # DEBUG_TOOLBAR_CONFIG = {
+    #     'SHOW_TOOLBAR_CALLBACK': show_toolbar,
+    # }
+
+    # Solution Three [Best]
+    DEBUG_TOOLBAR_CONFIG = {
+        'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG,
+    }

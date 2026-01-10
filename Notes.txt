@@ -1,87 +1,3 @@
-# Cool Professional Project Layout
-```
-social_app/
-│
-├── manage.py
-├── pyproject.toml
-├── uv.lock
-├── .env.dev
-├── .env.prod
-├── docker-compose.yml
-├── Dockerfile
-├── README.md
-│
-├── config/                   # Django project settings
-│   ├── __init__.py
-│   ├── settings/
-│   │   ├── base.py
-│   │   ├── dev.py
-│   │   └── prod.py
-│   ├── urls.py
-│   ├── wsgi.py
-│   └── asgi.py
-│
-├── apps/                     # Domain-driven Django apps
-│   ├── users/
-│   ├── groups/
-│   ├── posts/
-│   └── comments/
-│
-├── templates/                # Global templates
-│   └── base.html
-│
-├── static/                   # Collected static files
-├── media/                    # User uploads
-│
-├── tests/                    # Centralized tests
-│   ├── test_users.py
-│   ├── test_groups.py
-│   ├── test_posts.py
-│   └── test_comments.py
-│
-├── scripts/                  # Helper scripts
-│   ├── entrypoint.sh
-│   └── backup.sh
-│
-└── nginx/                    # Reverse proxy config
-    ├── nginx.conf            # Main config
-    └── default.conf          # Site config (proxy to Gunicorn)
-
-```
-
-
-# Cool Professional FrontEnd Project Layout
-```
-social_app/
-├── static_src/
-│   ├── sass/
-│   │   ├── base/
-│   │   │   ├── _variables.scss
-│   │   │   └── _typography.scss
-│   │   ├── layout/
-│   │   │   ├── _container.scss
-│   │   │   └── _header.scss
-│   │   ├── components/
-│   │   │   ├── _buttons.scss
-│   │   │   ├── _cards.scss
-│   │   │   └── _forms.scss
-│   │   ├── pages/
-│   │   │   └── _home.scss
-│   │   ├── vendor/
-│   │   │   └── _bootstrap.scss     # Bootstrap import wrapper
-│   │   └── main.scss
-│   └── js/
-│       ├── htmx_config.js
-│       └── bootstrap_init.js
-├── static/
-│   ├── css/
-│   │   └── main.css
-│   └── js/
-│       ├── htmx_config.js
-│       └── bootstrap_init.js
-└── package.json
-```
-
 # Cool Professional Complete Project Layout
 ```
 social_app/
@@ -89,6 +5,7 @@ social_app/
 ├── manage.py
 ├── pyproject.toml
 ├── uv.lock
+├── .env.example
 ├── .env.dev
 ├── .env.prod
 ├── docker-compose.yml
@@ -102,6 +19,7 @@ social_app/
 ├── config/                   # Django project settings
 │   ├── __init__.py
 │   ├── settings/
+│   |   ├── __init__.py
 │   │   ├── base.py
 │   │   ├── dev.py
 │   │   └── prod.py
@@ -116,10 +34,17 @@ social_app/
 │   └── comments/
 │
 ├── templates/                # Global templates
-│   └── base.html
+│   ├── base.html
+│   ├── errors/
+│   │   ├── 404.html
+│   │   ├── 500.html
 │
-├── static/                   # Collected static files (Django collectstatic output)
-├── media/                    # User uploads
+├── static/
+│   ├── css/
+│   │   ├── main.css     # Compiled from Sass
+│   │   └── main.css.map
+│
+├── media/
 │
 ├── static_src/               # Frontend source (Sass, JS)
 │   ├── sass/
@@ -142,21 +67,21 @@ social_app/
 │       ├── htmx_config.js
 │       └── bootstrap_init.js
 │
-├── tests/                    # Centralized tests
+├── tests/
 │   ├── test_users.py
 │   ├── test_groups.py
 │   ├── test_posts.py
 │   └── test_comments.py
 │
-├── scripts/                  # Helper scripts
+├── scripts/
 │   ├── entrypoint.sh
 │   └── backup.sh
 │
-├── nginx/                    # Reverse proxy config
+├── nginx/
 │   ├── nginx.conf
 │   └── default.conf
 │
-└── package.json              # Frontend dependencies
+└── package.json
 ```
 
 Notes:-
@@ -293,6 +218,42 @@ Notes:-
   it finds nothing → "404 errors".
 
 
+
+# Sass Installation Options  [https://getbootstrap.com/docs/5.0/customize/sass/]
+## Standalone CLI (recommended for simplicity)
+CMDS:
+```
+- mkdir scss
+- nano scss/custom.scss
+- mkdir css
+```
+
+```
+- npm install bootstrap@5
+- sudo npm install -g sass
+- sass static_src/sass/vendor/main.scss css/main.css  [Then you can run Sass anywhere:]
+- sass --load-path=node_modules scss/custom.scss css/custom.css
+- sass --load-path=node_modules --watch scss/custom.scss css/custom.css
+```
+
+## Project-local install (npm dev dependency)
+CMDS:
+```
+- npm install sass --save-dev
+- npx sass scss/custom.scss css/style.css
+```
+
+
+## Flow  [https://www.vincentschmalbach.com/customizing-bootstrap-5-with-sass-variables/]
+1. Install Node.js and a Package Manager
+2. Create a Project and Install Bootstrap
+3. Install Sass Compiler
+4. Set Up Folder Structure
+5. Create a Custom Sass File
+6. Compile Sass to CSS
+7. Include the Compiled CSS in Your HTML
+
+
 ## --------------- Flow Of The Project --------------- ##
 Notes:-
 1. Project Setup
@@ -311,56 +272,36 @@ Notes:-
 -------------------------
 ## "Dockerfile"  [I]:
 ```
-FROM python:3.12-slim-bullseye
+FROM python:3.12-slim-bookworm
 
-WORKDIR /usr/src/app
-
-ENV PYTHONDONTWRITEBYTECODE=1 \
-  PYTHONUNBUFFERED=1
-
-RUN apt-get update && \
-  apt-get install -y netcat-traditional \
-  curl && \
-  rm -rf /var/lib/apt/lists/*
-
-RUN curl -sSL https://install.python-poetry.org | python3 -
-ENV PATH="/root/.local/bin:$PATH"
-
-COPY poetry.lock pyproject.toml ./
-
-RUN uv sync --no-root
-
-COPY . .
-```
--------------------------
-## "Dockerfile"  [II]:
-```
-FROM python:3.12-slim-bullseye
-
-WORKDIR /usr/src/app
+WORKDIR /app
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
-  PYTHONUNBUFFERED=1
+  PYTHONUNBUFFERED=1 \
+  UV_LINK_MODE=copy \
+  UV_PYTHON_DOWNLOADS=never \
+  UV_PROJECT_ENVIRONMENT=/app/.venv
 
-RUN apt-get update && \
-  apt-get install -y netcat-traditional \
-  curl && \
-  rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends netcat-traditional
 
-RUN curl -sSL https://install.python-poetry.org | python3 -
-ENV PATH="/root/.local/bin:$PATH"
+COPY --from=ghcr.io/astral-sh/uv:0.8.14 /uv /uvx /bin/
 
-COPY poetry.lock pyproject.toml ./
+# for efficiency
+COPY pyproject.toml uv.lock /_lock/
 
-RUN uv sync --no-root
+RUN --mount=type=cache,target=/root/.cache \
+  cd /_lock && \
+  uv sync \
+  --frozen \
+  --no-install-project
 
 COPY scripts/ ./scripts/
-RUN sed -i 's/\r$//g' /usr/src/app/scripts/entrypoint.dev.sh && \
-  chmod +x /usr/src/app/scripts/entrypoint.dev.sh
+RUN sed -i "s/\r$//g" /app/scripts/entrypoint.dev.sh
+RUN chmod +x /app/scripts/entrypoint.dev.sh
 
 COPY . .
 
-ENTRYPOINT ["/usr/src/app/scripts/entrypoint.dev.sh"]
+ENTRYPOINT ["/app/scripts/entrypoint.dev.sh"]
 ```
 
 -------------------------
@@ -437,67 +378,6 @@ ENV PYTHONUNBUFFERED=1 \
 
 RUN addgroup --system app && adduser --system --group app
 
-RUN apt-get update && apt-get install -y --no-install-recommends netcat-traditional && \
-  rm -rf /var/lib/apt/lists/*
-
-WORKDIR $APP_HOME
-
-COPY . .
-
-COPY --from=builder /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
-COPY --from=builder /usr/local/bin /usr/local/bin
-
-COPY scripts/entrypoint.prod.sh $APP_HOME/scripts/entrypoint.prod.sh
-RUN sed -i 's/\r$//g' $APP_HOME/scripts/entrypoint.prod.sh && \
-  chmod +x $APP_HOME/scripts/entrypoint.prod.sh
-
-RUN chown -R app:app $APP_HOME
-
-USER app
-
-ENTRYPOINT ["/usr/src/app/scripts/entrypoint.prod.sh"]
-```
-
--------------------------
-## Dockerfile.prod  [III]:
-```
-###########
-# BUILDER #
-###########
-FROM python:3.12-slim-bullseye as builder
-
-WORKDIR /usr/src/app
-
-ENV PYTHONDONTWRITEBYTECODE=1 \
-  PYTHONUNBUFFERED=1 \
-  POETRY_VIRTUALENVS_CREATE=false \
-  PATH="/root/.local/bin:$PATH"
-
-RUN apt-get update && \
-  apt-get install -y --no-install-recommends gcc \
-  build-essential \
-  curl && \
-  rm -rf /var/lib/apt/lists/*
-
-RUN curl -sSL https://install.python-poetry.org | python3 -
-
-COPY pyproject.toml poetry.lock ./
-
-RUN uv sync --no-root
-
-#########
-# FINAL #
-#########
-FROM python:3.12-slim-bullseye
-
-ENV APP_HOME=/usr/src/app
-RUN mkdir $APP_HOME
-
-ENV PYTHONUNBUFFERED=1 \
-  PATH="/root/.local/bin:$PATH"
-
-RUN addgroup --system app && adduser --system --group app
-
 RUN mkdir $APP_HOME/staticfiles  # new
 RUN mkdir $APP_HOME/mediafiles  # new
 
@@ -525,44 +405,43 @@ ENTRYPOINT ["/usr/src/app/scripts/entrypoint.prod.sh"]
 -------------------------
 ## "docker-compose.yml"  [I]:
 ```
+version: '3.8'
+
 services:
-  web:
-    build: .
-    command: uv run python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/usr/src/app/
-    ports:
-      - 8000:8000
-    env_file:
-      - .env.dev
-```
--------------------------
-## "docker-compose.yml"  [II]:
-```
-services:
-  web:
-    build: .
-    command: uv run python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/usr/src/app/
-    ports:
-      - 8000:8000
-    env_file:
-      - .env.dev
-    depends_on:
-      - db
   db:
-    image: postgres:15
-    restart: always
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
+    image: postgres:16.5
     environment:
-      - POSTGRES_USER=config_django
-      - POSTGRES_PASSWORD=config_django
-      - POSTGRES_DB=config_django_dev
+      POSTGRES_DB: social_dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data/
+    ports:
+      - "5433:5432"
+
+  web:
+    build: .
+    command: uv run python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./.env.dev
+
+  cache:
+    image: redis:7.2.4
+    restart: always
+    ports:
+      - 6380:6379
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
 
 volumes:
-  postgres_data:
+  postgres_data_dev:
 ```
 
 -------------------------

@@ -1,0 +1,33 @@
+{% load static %}
+<div class="col-md-3 col-lg-3 d-none d-md-block sticky-sidebar">
+  <div class="bg-white p-4 rounded-5 shadow-sm">
+    <div class="text-center">
+      <img src="{% static 'assets/women_pp.png' %}" class="profile-avatar" alt="Profile">
+      <h3 class="h5 fw-bold mb-0">Name</h3>
+      <p class="text-muted small">@username</p>
+    </div>
+
+    <div class="border-top pt-5 text-start px-3">
+      <a href="/" class="d-flex align-items-center justify-content-center justify-content-lg-start mb-3 menu-item-link text-decoration-none text-black active">
+        <img class="menu-icon" src="{% static 'assets/home-24-outlined.svg' %}" alt="">
+        <div class="fw-medium m-0 d-none d-lg-block">Home</div>
+      </a>
+      <a href="#" class="d-flex align-items-center justify-content-center justify-content-lg-start mb-3 menu-item-link text-decoration-none text-black">
+        <img class="menu-icon" src="{% static 'assets/user-circle-24-outlined.svg' %}" alt="">
+        <div class="fw-medium m-0 d-none d-lg-block">Profile</div>
+      </a>
+      <a href="#" class="d-flex align-items-center justify-content-center justify-content-lg-start mb-3 menu-item-link text-decoration-none text-black">
+        <img class="menu-icon" src="{% static 'assets/grid-2x2-24-outlined.svg' %}" alt="">
+        <div class="fw-medium m-0 d-none d-lg-block">Feeds</div>
+      </a>
+    </div>
+
+    <div class="text-start px-3 mt-4 border-top pt-3">
+      <h3 class="h6 fw-bold mb-3">Followings</h3>
+      <div class="d-flex align-items-center mb-2">
+        <img src="{% static 'assets/Group 8.png' %}" class="rounded-circle me-2 follower-avatar" alt="Follower">
+        <small class="m-0">Shigeru Minamoto</small>
+      </div>
+    </div>
+  </div>
+</div>

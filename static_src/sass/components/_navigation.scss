@@ -1,0 +1,20 @@
+.menu-item-link, .follower-item {
+    cursor: pointer;
+    padding: 8px;
+    border-radius: var(--bs-border-radius-sm, 0.25rem);
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: #e9ecef;
+    }
+}
+
+.menu-item-link.active {
+    background-color: rgba(13, 110, 253, 0.1);
+}
+
+.menu-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
+}

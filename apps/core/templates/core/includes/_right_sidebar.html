@@ -1,0 +1,18 @@
+{% load static %}
+<div class="col-md-3 col-lg-3 d-none d-lg-block sticky-sidebar">
+  <div class="d-flex align-items-center bg-white rounded-5 p-3">
+    <img class="cursor-pointer" src="{% static 'assets/search-24-outlined.svg' %}" alt="">
+    <input class="form-control-search" type="text" placeholder="Search...">
+  </div>
+
+  <div class="bg-white rounded-5 p-3 mt-3">
+    <h3 class="h5 fw-bold">Suggestions</h3>
+    <div class="d-flex align-items-center justify-content-between pt-2">
+      <div class="d-flex align-items-center gap-2">
+        <img src="{% static 'assets/Group 8.png' %}" alt="">
+        <p class="mb-0">Shigeru Minamoto</p>
+      </div>
+      <button class="btn btn-outline-primary btn-sm">Follow</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.form-control-search {
+  display: block;
+  width: 100%;
+  padding: 0.375rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--bs-body-color);
+  appearance: none;
+  background-color: transparent;
+  background-clip: padding-box;
+  border: var(--bs-border-width) solid transparent;
+  border-radius: var(--bs-border-radius);
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.form-control-search:focus {
+  color: var(--bs-body-color);
+  background-color: transparent;
+  border-color: transparent;
+  outline: 0;
+}

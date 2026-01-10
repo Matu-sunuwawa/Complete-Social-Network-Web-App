@@ -1,0 +1,139 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block title %}Feed | Social App{% endblock %}
+
+{% block content %}
+<div class="row align-items-start">
+
+    {% include "core/includes/_left_sidebar.html" %}
+
+    <div class="col col-md-9 col-lg-6">
+
+        <div class="bg-white rounded-5 p-3">
+          <div class="d-flex align-items-center">
+            <img src="{% static 'assets/Group 8.png' %}" alt="">
+            <textarea class="form-control-search" rows="1" placeholder="Share something..."></textarea>
+          </div>
+          <div class="border-top d-flex justify-content-between pt-3 mt-3">
+            <img src="{% static 'assets/image-24-outlined.svg' %}" alt="">
+            <button class="btn btn-primary fw-medium px-4 rounded-3">Send</button>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-between pt-3 mt-4">
+          <h3 class="h5 text-black">Feeds</h3>
+          <div class="d-flex text-color-category">
+            <h3 class="h5 fw-medium px-3">Recents</h3>
+            <h3 class="h5 fw-medium">Friends</h3>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-5 p-3 mt-4">
+          <div class="d-flex align-items-center py-2">
+            <img src="{% static 'assets/Group 8.png' %}" alt="">
+            <div class="ps-3">
+              <h3 class="h5 mb-0">George Lobko</h3>
+              <p class="text-muted small mb-0">2 hours ago</p>
+            </div>
+          </div>
+
+          <p>
+            Hi everyone, today I was on the most beautiful mountain in the world ⛰️.
+          </p>
+
+          <div class="post-gallery">
+            <img class="post-images" src="{% static 'assets/rod-long-liGPSuWK4ek-unsplash 1.png' %}" alt="">
+            <img class="post-images" src="{% static 'assets/national-gallery-of-art-co_X9D0SgRo-unsplash 1.png' %}" alt="">
+            <img class="post-images" src="{% static 'assets/rod-long-liGPSuWK4ek-unsplash 1.png' %}" alt="">
+          </div>
+
+          <div class="border-top d-flex mt-3 pt-2">
+            <div class="px-2 d-flex align-items-center gap-1">
+              6355 <img src="{% static 'assets/eye-24-outlined.svg' %}" alt="">
+            </div>
+            <div class="px-2 d-flex align-items-center gap-1">
+              <img src="{% static 'assets/thumbs-up-24-outlined.svg' %}" alt="">
+              Like
+            </div>
+            <div class="px-2 d-flex align-items-center gap-1">
+              <img src="./static/assets/rocketchat-24-outlined.svg" alt="">
+              Comment
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-5 p-3 mt-4">
+          <div class="d-flex align-items-center py-2">
+            <img src="{% static 'assets/Group 8.png' %}" alt="">
+            <div class="ps-3">
+              <h3 class="h5 mb-0">George Lobko</h3>
+              <p class="text-muted small mb-0">2 hours ago</p>
+            </div>
+          </div>
+
+          <p>
+            Hi everyone, today I was on the most beautiful mountain in the world ⛰️.
+          </p>
+
+          <div class="post-gallery">
+            <img class="post-images" src="{% static 'assets/rod-long-liGPSuWK4ek-unsplash 1.png' %}" alt="">
+            <img class="post-images" src="{% static 'assets/national-gallery-of-art-co_X9D0SgRo-unsplash 1.png' %}" alt="">
+            <img class="post-images" src="{% static 'assets/rod-long-liGPSuWK4ek-unsplash 1.png' %}" alt="">
+          </div>
+
+          <div class="border-top d-flex mt-3 pt-2">
+            <div class="px-2 d-flex align-items-center gap-1">
+              6355 <img src="{% static 'assets/eye-24-outlined.svg' %}" alt="">
+            </div>
+            <div class="px-2 d-flex align-items-center gap-1">
+              <img src="{% static 'assets/thumbs-up-24-outlined.svg' %}" alt="">
+              Like
+            </div>
+            <div class="px-2 d-flex align-items-center gap-1">
+              <img src="./static/assets/rocketchat-24-outlined.svg" alt="">
+              Comment
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-5 p-3 mt-4">
+          <div class="d-flex align-items-center py-2">
+            <img src="{% static 'assets/Group 8.png' %}" alt="">
+            <div class="ps-3">
+              <h3 class="h5 mb-0">George Lobko</h3>
+              <p class="text-muted small mb-0">2 hours ago</p>
+            </div>
+          </div>
+
+          <p>
+            Hi everyone, today I was on the most beautiful mountain in the world ⛰️.
+          </p>
+
+          <div class="post-gallery">
+            <img class="post-images" src="{% static 'assets/rod-long-liGPSuWK4ek-unsplash 1.png' %}" alt="">
+            <img class="post-images" src="{% static 'assets/national-gallery-of-art-co_X9D0SgRo-unsplash 1.png' %}" alt="">
+            <img class="post-images" src="{% static 'assets/rod-long-liGPSuWK4ek-unsplash 1.png' %}" alt="">
+          </div>
+
+          <div class="border-top d-flex mt-3 pt-2">
+            <div class="px-2 d-flex align-items-center gap-1">
+              6355 <img src="{% static 'assets/eye-24-outlined.svg' %}" alt="">
+            </div>
+            <div class="px-2 d-flex align-items-center gap-1">
+              <img src="{% static 'assets/thumbs-up-24-outlined.svg' %}" alt="">
+              Like
+            </div>
+            <div class="px-2 d-flex align-items-center gap-1">
+              <img src="./static/assets/rocketchat-24-outlined.svg" alt="">
+              Comment
+            </div>
+          </div>
+        </div>
+
+    </div>
+
+    {% include "core/includes/_right_sidebar.html" %}
+
+</div>
+{% endblock %}
