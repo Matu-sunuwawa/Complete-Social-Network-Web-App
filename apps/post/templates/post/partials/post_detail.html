@@ -1,0 +1,57 @@
+{% load static %}
+
+<div class="d-flex align-items-center mb-3">
+  <button class="btn btn-link text-decoration-none text-primary p-0"
+          hx-get="{% url 'core:home' %}"
+          hx-target="#post-list"
+          hx-swap="innerHTML">
+    ← Back
+  </button>
+</div>
+
+<div class="bg-white rounded-5 p-3 mt-4 post-card">
+  <div class="d-flex align-items-center py-2">
+    <img src="{% static 'assets/Group 8.png' %}" alt="">
+    <div class="ps-3">
+      <h3 class="h5 mb-0">{{post.user.username}}</h3>
+      <p class="text-muted small mb-0">{{post.created_at}}</p>
+    </div>
+  </div>
+
+  <p>
+    {{post.content}}
+  </p>
+
+  <div class="post-gallery">
+    {% if post.image %}
+      <img src="{{ post.image.url }}" alt="post img" />
+    {% endif %}
+  </div>
+
+  <div class="border-top d-flex mt-3 pt-2">
+    <div class="px-2 d-flex align-items-center gap-1 cursor-pointer">
+      6355 <img src="{% static 'assets/eye-24-outlined.svg' %}" alt="">
+    </div>
+    <div
+      class="px-2 d-flex align-items-center gap-1 cursor-pointer"
+      hx-post="{% url 'post:like_post' post.id %}"
+      hx-target="#like-section-{{post.id}}"
+      hx-swap="innerHTML"
+    >
+      <div id="like-section-{{post.id}}">
+        {% include 'post/partials/like_button.html' with post=post %}
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white p-3">
+    <div class="border-top d-flex align-items-center pt-3">
+      <img src="{% static 'assets/Group 8.png' %}" alt="" />
+      <textarea class="form-control-search" rows="1" placeholder="post your reply"></textarea>
+    </div>
+    <div class="border-top d-flex justify-content-between pt-3 mt-3">
+      <img src="{% static 'assets/image-24-outlined.svg' %}" alt="" />
+      <button class="btn btn-primary fw-medium px-4 rounded-3">Reply</button>
+    </div>
+  </div>
+</div>

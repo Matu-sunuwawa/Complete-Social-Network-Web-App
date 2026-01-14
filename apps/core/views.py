@@ -15,10 +15,10 @@ class HomeView(TemplateView):
         return [self.template_name]
 
     def get_context_data(self, **kwargs):
-        time.sleep(2)
+        time.sleep(1)
         context = super().get_context_data(**kwargs)
-        posts = list(Post.objects.all())
-        random.shuffle(posts)
+        posts = Post.objects.all()
+        # random.shuffle(posts)
         paginator = Paginator(posts, 3)
         page_num = self.request.GET.get('page',1)
         page_obj = paginator.get_page(page_num)

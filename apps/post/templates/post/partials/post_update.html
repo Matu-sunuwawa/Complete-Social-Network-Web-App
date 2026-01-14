@@ -1,0 +1,88 @@
+{% load static %}
+
+<div class="d-flex align-items-center mb-3">
+  <button class="btn btn-link text-decoration-none text-primary p-0"
+          hx-get="{% url 'core:home' %}"
+          hx-target="#post-list"
+          hx-swap="innerHTML">
+    ← Back
+  </button>
+</div>
+
+<form hx-post="{% url 'post:post_update' post.id %}"
+      hx-target="#post-list"
+      hx-encoding="multipart/form-data"
+      class="bg-white rounded-5 p-3 mb-4">
+    {% csrf_token %}
+
+    <div class="d-flex align-items-start gap-2">
+        <img src="{% static 'assets/Group 8.png' %}" class="rounded-circle" width="40" height="40" alt="">
+        <textarea name="content"
+                  class="form-control border-0 shadow-none fs-5"
+                  rows="3"
+                  placeholder="What's on your mind?"
+                  style="resize: none;"
+                  required>{{ post.content }}</textarea>
+    </div>
+
+    <div id="image-container-{{ post.id }}" class="mt-3 {% if not post.image %}d-none{% endif %}">
+        <div class="image-preview-wrapper">
+            <button type="button" class="btn-delete-image" onclick="handleImageRemove('{{ post.id }}')">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+
+            <img id="image-preview-{{ post.id }}"
+                 src="{% if post.image %}{{ post.image.url }}{% endif %}"
+                 class="preview-img" alt="Preview">
+
+            <input type="checkbox" name="image-clear" id="image-clear-{{ post.id }}" class="d-none">
+        </div>
+    </div>
+
+    <div class="border-top d-flex justify-content-between align-items-center pt-3 mt-3">
+        <div class="d-flex align-items-center">
+            <input type="file" name="image" accept="image/*" class="d-none" id="image-upload-{{ post.id }}"
+                   onchange="handleImagePreview(this, '{{ post.id }}')">
+
+            <label for="image-upload-{{ post.id }}" class="btn btn-light rounded-circle p-2 cursor-pointer">
+                <img src="{% static 'assets/image-24-outlined.svg' %}" width="24" alt="Change">
+            </label>
+            <span class="ms-2 small text-muted fw-medium">Add/Change Photo</span>
+        </div>
+
+        <button type="submit" class="btn btn-primary fw-bold px-5 rounded-3">
+            Update
+        </button>
+    </div>
+</form>
+
+<script>
+    function handleImagePreview(input, postId) {
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const preview = document.getElementById(`image-preview-${postId}`);
+                const container = document.getElementById(`image-container-${postId}`);
+                const clearCheckbox = document.getElementById(`image-clear-${postId}`);
+
+                if (preview) preview.src = e.target.result;
+                if (container) container.classList.remove('d-none');
+                if (clearCheckbox) clearCheckbox.checked = false;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    function handleImageRemove(postId) {
+        const container = document.getElementById(`image-container-${postId}`);
+        const uploadInput = document.getElementById(`image-upload-${postId}`);
+        const clearCheckbox = document.getElementById(`image-clear-${postId}`);
+
+        if (container) container.classList.add('d-none');
+        if (uploadInput) uploadInput.value = "";
+        if (clearCheckbox) clearCheckbox.checked = true;
+    }
+</script>

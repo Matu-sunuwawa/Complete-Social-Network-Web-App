@@ -9,7 +9,7 @@ class Post(models.Model):
     User, on_delete=models.CASCADE, related_name="posts"
   )
   group = models.ForeignKey(
-    Group, on_delete=models.CASCADE, related_name="posts"
+    Group, on_delete=models.CASCADE, related_name="posts", null=True, blank=True, default=None
   )
   content = models.TextField()
   image = models.ImageField(

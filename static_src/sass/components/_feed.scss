@@ -56,3 +56,33 @@
     }
   }
 }
+
+.liked-icon {
+  filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(202deg) brightness(104%) contrast(97%);
+}
+
+.dropdown-menu {
+  min-width: 150px;
+  padding: 0.5rem;
+
+  .dropdown-item {
+    border-radius: $border-radius-sm;
+    font-weight: 500;
+
+    &:hover {
+      background-color: #f8f9fa;
+    }
+
+    &:active {
+      background-color: $primary;
+      color: white;
+    }
+  }
+}
+
+.cursor-pointer {
+    transition: opacity 0.2s;
+    &:hover {
+        opacity: 0.7;
+    }
+}

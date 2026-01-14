@@ -1,0 +1,82 @@
+{% load static %}
+
+<div class="d-flex align-items-center mb-3">
+  <button class="btn btn-link text-decoration-none text-primary p-0"
+          hx-get="{% url 'core:home' %}"
+          hx-target="#post-list"
+          hx-swap="innerHTML">
+    ← Back
+  </button>
+</div>
+
+<form method="post" action="{% url 'post:post_update' post.id %}" enctype="multipart/form-data" class="bg-white rounded-5 p-3 mb-4">
+    {% csrf_token %}
+
+    <div class="d-flex align-items-center">
+        <img src="{% static 'assets/Group 8.png' %}" alt="">
+        <textarea name="content"
+                  class="form-control-search"
+                  rows="3"
+                  placeholder="What's on your mind?"
+                  required>{{ post.content }}</textarea>
+    </div>
+
+    <!-- Image section -->
+    <div class="my-3">
+        {% if post.image %}
+            <!-- Current image -->
+            <div id="current-image-section">
+                <p class="small text-muted mb-1">Current image:</p>
+                <img src="{{ post.image.url }}"
+                    alt="Current"
+                    class="img-fluid rounded-3"
+                    style="max-height: 150px;">
+
+                <!-- Image action buttons -->
+                <div class="mt-2">
+                    <!-- Change image button - directly triggers file input -->
+                    <button type="button"
+                            class="btn btn-sm btn-outline-secondary me-2"
+                            onclick="document.getElementById('image-upload').click()">
+                        Change image
+                    </button>
+
+                    <!-- Remove image button -->
+                    <button type="button"
+                            class="btn btn-sm btn-outline-danger"
+                            onclick="
+                                document.getElementById('image-clear-checkbox').checked = true;
+                                document.getElementById('current-image-section').classList.add('d-none');
+                                document.getElementById('image-upload').classList.remove('d-none');
+                            ">
+                        Remove image
+                    </button>
+                </div>
+            </div>
+
+            <!-- Hidden checkbox for Django to know to clear image -->
+            <input type="checkbox"
+                   name="image-clear"
+                   id="image-clear-checkbox"
+                   class="d-none">
+        {% endif %}
+
+        <!-- File input - hidden if there's an image -->
+        <div class="{% if post.image %}d-none{% endif %}">
+            <p class="small text-muted mb-1">
+                {% if post.image %}New image (optional):{% else %}Image (optional):{% endif %}
+            </p>
+            <input type="file"
+                   name="image"
+                   accept="image/*"
+                   id="image-upload"
+                   class="form-control">
+        </div>
+    </div>
+
+    <div class="border-top d-flex justify-content-end pt-3 mt-3">
+        <button type="submit" class="btn btn-primary fw-medium px-4 rounded-3">
+            Update
+        </button>
+    </div>
+</form>

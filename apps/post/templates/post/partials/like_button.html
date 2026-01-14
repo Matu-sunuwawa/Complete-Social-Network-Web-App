@@ -1,0 +1,16 @@
+
+{% load static post_tags %}
+
+{% if user.is_authenticated and post|post_has_likes:user %}
+  <img
+    src="{% static 'assets/thumbs-up-24-outlined.svg' %}"
+    alt="Liked"
+    class="liked-icon"
+  />
+{% else %}
+  <img
+    src="{% static 'assets/thumbs-up-24-outlined.svg' %}"
+    alt="Like"
+  />
+{% endif %}
+<span>{{ post.likes.count }}</span>

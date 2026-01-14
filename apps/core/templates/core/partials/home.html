@@ -2,15 +2,60 @@
 
 {% for post in posts %}
   <div class="bg-white rounded-5 p-3 mt-4 post-card">
-    <div class="d-flex align-items-center py-2">
-      <img src="{% static 'assets/Group 8.png' %}" alt="">
-      <div class="ps-3">
-        <h3 class="h5 mb-0">{{post.user.username}}</h3>
-        <p class="text-muted small mb-0">{{post.created_at}}</p>
+    <div class="d-flex justify-content-between py-2">
+      <div class="d-flex align-items-center">
+        <img src="{% static 'assets/Group 8.png' %}" alt="">
+        <div class="ps-3">
+          <h3 class="h5 mb-0">{{post.user.username}}</h3>
+          <p class="text-muted small mb-0">{{post.created_at}}</p>
+        </div>
+      </div>
+      <!-- some dots here when user clicks will show edit and delete option -->
+      <div>
+        <div class="dropdown">
+          <div
+            class="cursor-pointer p-2"
+            id="postMenu{{ post.id }}"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="1"></circle>
+              <circle cx="12" cy="5" r="1"></circle>
+              <circle cx="12" cy="19" r="1"></circle>
+            </svg>
+          </div>
+
+          <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm rounded-4" aria-labelledby="postMenu{{ post.id }}">
+            {% if post.user == request.user %}
+              <li>
+                <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#"
+                   hx-get="{% url 'post:post_update' post.id %}"
+                   hx-target="#post-list"
+                >
+                  <small>Edit Post</small>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item d-flex align-items-center gap-2 py-2 text-danger" href="#">
+                  <small>Delete Post</small>
+                </a>
+              </li>
+            {% else %}
+              <li><a class="dropdown-item py-2" href="#"><small>Report</small></a></li>
+              <li><a class="dropdown-item py-2" href="#"><small>Not interested</small></a></li>
+            {% endif %}
+          </ul>
+        </div>
       </div>
     </div>
 
-    <p>
+    <p
+      hx-get="{% url 'post:post_detail' post.id %}"
+      hx-target="#post-list"
+      hx-swap="innerHTML"
+      class="cursor-pointer"
+    >
       {{post.content}}
     </p>
 
@@ -24,11 +69,22 @@
       <div class="px-2 d-flex align-items-center gap-1 cursor-pointer">
         6355 <img src="{% static 'assets/eye-24-outlined.svg' %}" alt="">
       </div>
-      <div class="px-2 d-flex align-items-center gap-1 cursor-pointer">
-        <img src="{% static 'assets/thumbs-up-24-outlined.svg' %}" alt="">
-        Like
+      <div
+        class="px-2 d-flex align-items-center gap-1 cursor-pointer"
+        hx-post="{% url 'post:like_post' post.id %}"
+        hx-target="#like-section-{{post.id}}"
+        hx-swap="innerHTML"
+      >
+        <div id="like-section-{{post.id}}">
+          {% include 'post/partials/like_button.html' with post=post %}
+        </div>
       </div>
-      <div class="px-2 d-flex align-items-center gap-1 cursor-pointer">
+      <div
+        class="px-2 d-flex align-items-center gap-1 cursor-pointer"
+        hx-get="{% url 'post:post_detail' post.id %}"
+        hx-target="#post-list"
+        hx-swap="innerHTML"
+      >
         <img src="./static/assets/rocketchat-24-outlined.svg" alt="">
         Comment
       </div>
