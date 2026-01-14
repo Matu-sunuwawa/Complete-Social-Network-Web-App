@@ -1,7 +1,7 @@
 {% load static %}
 
 {% for post in posts %}
-  <div class="bg-white rounded-5 p-3 mt-4 post-card">
+  <div id="post-{{ post.id }}" class="bg-white rounded-5 p-3 mt-4 post-card">
     <div class="d-flex justify-content-between py-2">
       <div class="d-flex align-items-center">
         <img src="{% static 'assets/Group 8.png' %}" alt="">
@@ -10,7 +10,6 @@
           <p class="text-muted small mb-0">{{post.created_at}}</p>
         </div>
       </div>
-      <!-- some dots here when user clicks will show edit and delete option -->
       <div>
         <div class="dropdown">
           <div
@@ -37,9 +36,11 @@
                 </a>
               </li>
               <li>
-                <a class="dropdown-item d-flex align-items-center gap-2 py-2 text-danger" href="#">
-                  <small>Delete Post</small>
-                </a>
+                <button class="dropdown-item d-flex align-items-center gap-2 py-2 text-danger border-0 bg-transparent"
+                    hx-get="{% url 'post:post_delete' post.id %}"
+                    hx-target="#modals-here">
+                    <small>Delete Post</small>
+                </button>
               </li>
             {% else %}
               <li><a class="dropdown-item py-2" href="#"><small>Report</small></a></li>

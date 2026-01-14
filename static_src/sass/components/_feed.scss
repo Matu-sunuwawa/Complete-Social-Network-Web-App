@@ -57,6 +57,15 @@
   }
 }
 
+.post-card {
+    transition: all 0.3s ease;
+
+    &.htmx-swapping {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+}
+
 .liked-icon {
   filter: invert(27%) sepia(51%) saturate(2878%) hue-rotate(202deg) brightness(104%) contrast(97%);
 }
