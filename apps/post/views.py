@@ -5,7 +5,7 @@ from django.views.generic import (
   UpdateView, DeleteView
 )
 from django.http import HttpResponse
-from .models import Post
+from .models import Post, Comment
 import time
 
 
@@ -84,3 +84,16 @@ def like_post(request, pk):
       'post': post,
       'user': request.user
     })
+
+def comment_create(request,pk):
+  post = get_object_or_404(Post, pk=pk)
+
+  if request.method == "POST":
+    content = request.POST["content"]
+    comment = Comment.objects.create(
+      user = request.user,
+      post = post,
+      content = content
+    )
+    if request.headers.get('HX-Request'):
+      return render(request, 'post/partials/comment.html', {"comment":comment})

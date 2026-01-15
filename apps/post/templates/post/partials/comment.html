@@ -1,0 +1,24 @@
+{% load static %}
+<div class="d-flex align-items-start gap-3 mb-3 animate-fade-in">
+    <img src="{% static 'assets/Group 8.png' %}" class="rounded-circle" width="32" height="32" alt="">
+    <div class="bg-light rounded-4 p-3 flex-grow-1">
+        <div class="d-flex justify-content-between align-items-center mb-1">
+            <h6 class="fw-bold mb-0 small">{{ comment.user.username }}</h6>
+            <span class="text-muted smallest">{{ comment.created_at|timesince }} ago</span>
+        </div>
+        <p class="mb-0 small text-secondary">
+            {{ comment.content }}
+        </p>
+    </div>
+</div>
+
+<style>
+    .smallest { font-size: 0.75rem; }
+    .animate-fade-in {
+        animation: fadeIn 0.4s ease-in-out;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
