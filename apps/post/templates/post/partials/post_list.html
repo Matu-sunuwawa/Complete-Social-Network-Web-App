@@ -1,7 +1,7 @@
 {% load static %}
 
 {% for post in posts %}
-  <div id="post-{{ post.id }}" class="bg-white rounded-5 p-3 mt-4 post-card">
+  <div id="post-{{ post.id }}" class="bg-white rounded-5 p-3 mt-4 shadow-sm post-card">
     <div class="d-flex justify-content-between py-2">
       <div class="d-flex align-items-center">
         <img src="{% static 'assets/Group 8.png' %}" alt="">
@@ -29,8 +29,8 @@
             {% if post.user == request.user %}
               <li>
                 <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#"
-                   hx-get="{% url 'post:post_update' post.id %}"
-                   hx-target="#post-list"
+                    hx-get="{% url 'post:post_update' post.id %}"
+                    hx-target="#post-list"
                 >
                   <small>Edit Post</small>
                 </a>
@@ -95,7 +95,7 @@
 
       <div class="text-center mt-4">
         <span
-          hx-get="{% url 'core:home' %}?page={{ page_obj.next_page_number }}"
+          hx-get="{% url 'user:profile_detail' request.user.username %}?page={{ page_obj.next_page_number }}"
           hx-swap="beforeend"
           hx-target="#post-list"
           hx-select=".post-card"
@@ -108,4 +108,6 @@
     {% endif %}
 
   </div>
+{% empty %}
+    <p class="text-center text-muted py-5">No posts yet.</p>
 {% endfor %}

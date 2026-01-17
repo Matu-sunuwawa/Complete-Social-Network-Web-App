@@ -10,7 +10,18 @@ import time
 
 
 class PostListView(ListView):
-  pass
+  model = Post
+  template_name = 'post/partials/post_list.html'
+  context_object_name = 'posts'
+  paginate_by = 10
+
+  def get_queryset(self):
+    time.sleep(1)
+    return super().get_queryset()
+
+  def get_template_names(self):
+    if self.request.headers.get('HX-Request'):
+      return ['post/partials/post_list.html']
 
 class PostCreateView(CreateView):
   model = Post

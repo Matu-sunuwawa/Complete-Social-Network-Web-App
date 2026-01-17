@@ -3,9 +3,12 @@ from django.http import HttpResponse
 from django.views.generic import (
   DetailView, UpdateView, DeleteView
 )
+from django.core.paginator import Paginator
 from django.contrib.auth.models import User
 from django.urls import reverse_lazy
 from .models import UserProfile
+from apps.post.models import Post
+import time
 
 
 class ProfileDetailView(DetailView):
@@ -16,14 +19,24 @@ class ProfileDetailView(DetailView):
   slug_url_kwarg = 'username'
 
   def get_template_names(self):
-    if self.request.headers.get('HX-Request'):
-      return ['user/partials/profile_content.html']
-    return [self.template_name]
+      trigger_target = self.request.headers.get('HX-Target')
+      if self.request.headers.get('HX-Request'):
+          if trigger_target == "main-content-area":
+              return ['user/partials/profile_content.html']
+          return ['post/partials/post_list.html']
+      return [self.template_name]
 
   def get_context_data(self, **kwargs):
-    context = super().get_context_data(**kwargs)
-    context['posts'] = self.object.posts.all().order_by('-created_at')
-    return context
+      time.sleep(1)
+      context = super().get_context_data(**kwargs)
+      posts = Post.objects.all()
+      paginator = Paginator(posts, 3)
+      page_num = self.request.GET.get('page',1)
+      page_obj = paginator.get_page(page_num)
+
+      context['posts'] = page_obj.object_list
+      context['page_obj'] = page_obj
+      return context
 
 class ProfileUpdateView(UpdateView):
   model = UserProfile

@@ -14,7 +14,7 @@ class HomeView(TemplateView):
         if self.request.headers.get('HX-Request'):
             if trigger_target == "main-content-area":
                 return ['core/partials/home_content.html']
-            return ['core/partials/home.html']
+            return ['post/partials/post_list.html']
         return [self.template_name]
 
     def get_context_data(self, **kwargs):

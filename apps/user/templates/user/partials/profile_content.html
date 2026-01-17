@@ -7,9 +7,11 @@
 </div>
 
 <div id="post-list">
-    {% for post in posts %}
-        {% include 'core/partials/home.html' with post=post %}
-    {% empty %}
-        <p class="text-center text-muted py-5">No posts yet.</p>
-    {% endfor %}
+    {% include 'post/partials/post_list.html' %}
+</div>
+
+<div class="d-flex justify-content-center my-4">
+    <div id="spinner" class="spinner-border htmx-indicator" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
 </div>
