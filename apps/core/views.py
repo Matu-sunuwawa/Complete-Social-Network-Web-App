@@ -10,7 +10,10 @@ class HomeView(TemplateView):
     template_name = 'core/home.html'
 
     def get_template_names(self):
+        trigger_target = self.request.headers.get('HX-Target')
         if self.request.headers.get('HX-Request'):
+            if trigger_target == "main-content-area":
+                return ['core/partials/home_content.html']
             return ['core/partials/home.html']
         return [self.template_name]
 

@@ -2,21 +2,41 @@
 <div class="col-md-3 col-lg-3 d-none d-md-block sticky-sidebar">
   <div class="bg-white p-4 rounded-5 shadow-sm">
     <div class="text-center">
-      <img src="{% static 'assets/women_pp.png' %}" class="profile-avatar" alt="Profile">
-      <h3 class="h5 fw-bold mb-0">Name</h3>
-      <p class="text-muted small">@username</p>
+      {% if request.user.profile.profile_pic %}
+        <img src="{{ request.user.profile.profile_pic.url }}" class="profile-avatar" alt="Profile">
+      {% endif %}
+      <h3 class="h5 fw-bold mb-0">{{ request.user.username }}</h3>
+      <p class="small">{{ request.user.profile.bio|default:"No bio yet."|truncatechars:30 }}</p>
     </div>
 
     <div class="border-top pt-5 text-start px-3">
-      <a href="/" class="d-flex align-items-center justify-content-center justify-content-lg-start mb-3 menu-item-link text-decoration-none text-black active">
+      <a href="/"
+        hx-get="/"
+        hx-target="#main-content-area"
+        hx-push-url="true"
+        class="d-flex align-items-center mb-3
+              menu-item-link text-decoration-none text-black
+              {% if request.path == '/' %}active{% endif %}"
+      >
         <img class="menu-icon" src="{% static 'assets/home-24-outlined.svg' %}" alt="">
         <div class="fw-medium m-0 d-none d-lg-block">Home</div>
       </a>
-      <a href="#" class="d-flex align-items-center justify-content-center justify-content-lg-start mb-3 menu-item-link text-decoration-none text-black">
+      <a href="{% url 'user:profile_detail' request.user.username %}"
+        hx-get="{% url 'user:profile_detail' request.user.username %}"
+        hx-target="#main-content-area"
+        hx-push-url="true"
+        class="d-flex align-items-center mb-3
+              menu-item-link text-decoration-none text-black
+              {% if request.path == '/user/profile/'|add:request.user.username|add:'/' %}active{% endif %}"
+      >
         <img class="menu-icon" src="{% static 'assets/user-circle-24-outlined.svg' %}" alt="">
         <div class="fw-medium m-0 d-none d-lg-block">Profile</div>
       </a>
-      <a href="#" class="d-flex align-items-center justify-content-center justify-content-lg-start mb-3 menu-item-link text-decoration-none text-black">
+      <a href="#"
+        class="d-flex align-items-center justify-content-center justify-content-lg-start
+              mb-3 menu-item-link text-decoration-none text-black
+              "
+      >
         <img class="menu-icon" src="{% static 'assets/grid-2x2-24-outlined.svg' %}" alt="">
         <div class="fw-medium m-0 d-none d-lg-block">Feeds</div>
       </a>

@@ -1,0 +1,40 @@
+{% load static %}
+
+<form hx-post="{% url 'post:post_create' %}"
+    hx-target="#post-list"
+    hx-swap="innerHTML"
+    hx-encoding="multipart/form-data"
+    hx-on::after-request="if(event.detail.successful) { this.reset(); document.getElementById('image-container-create').classList.add('d-none'); }"
+    class="bg-white rounded-5 p-3 mb-4"
+    >
+    {% csrf_token %}
+    <div class="d-flex align-items-center">
+        <img src="{% static 'assets/Group 8.png' %}" alt="">
+        <textarea name="content" class="form-control-search" rows="1" placeholder="Share something..." required></textarea>
+    </div>
+    <div class="border-top d-flex justify-content-between pt-3 mt-3">
+        <input type="file" name="image" accept="image/*" class="d-none" id="image-upload-create" onchange="handleImagePreview(this, 'create')">
+        <label for="image-upload-create" class="cursor-pointer">
+            <img src="{% static 'assets/image-24-outlined.svg' %}" alt="">
+        </label>
+        <button type="submit" class="btn btn-primary fw-medium px-4">Send</button>
+    </div>
+</form>
+
+<div class="d-flex justify-content-between pt-3 mt-4">
+    <h3 class="h5 text-black">Feeds</h3>
+    <div class="d-flex text-color-category">
+        <h3 class="h5 fw-medium px-3">Recents</h3>
+        <h3 class="h5 fw-medium">Friends</h3>
+    </div>
+</div>
+
+<div id="post-list">
+    {% include 'core/partials/home.html' %}
+</div>
+
+<div class="d-flex justify-content-center my-4">
+    <div id="spinner" class="spinner-border htmx-indicator" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>

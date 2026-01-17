@@ -4,3 +4,11 @@
 3. Notification
 4. Pagination loading  [not using `time`, use `best method`]
 5. HTMX page url is not updating
+
+# Quick fixes
+1. left side menus pages are not created yet
+  - home  [DONE]
+  - profile  [DONE]
+  - feed
+2. images for users are statics
+3. user follows other users

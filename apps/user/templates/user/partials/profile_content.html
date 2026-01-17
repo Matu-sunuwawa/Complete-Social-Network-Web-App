@@ -1,0 +1,15 @@
+<div class="bg-white rounded-5 p-4 mb-4 shadow-sm" id="profile-info-section">
+    {% include 'user/partials/profile_info.html' with profile_user=profile_user %}
+</div>
+
+<div class="d-flex justify-content-between pt-3 mt-4">
+    <h3 class="h5 text-black">Posts</h3>
+</div>
+
+<div id="post-list">
+    {% for post in posts %}
+        {% include 'core/partials/home.html' with post=post %}
+    {% empty %}
+        <p class="text-center text-muted py-5">No posts yet.</p>
+    {% endfor %}
+</div>

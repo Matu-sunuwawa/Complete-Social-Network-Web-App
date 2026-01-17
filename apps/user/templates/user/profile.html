@@ -1,0 +1,14 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row align-items-start">
+    {% include "core/includes/_left_sidebar.html" %}
+
+    <div class="col col-md-9 col-lg-6" id="main-content-area">
+        {% include 'user/partials/profile_content.html' %}
+    </div>
+
+    {% include "core/includes/_right_sidebar.html" %}
+</div>
+{% endblock %}

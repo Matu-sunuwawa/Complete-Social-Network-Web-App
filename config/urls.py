@@ -13,6 +13,7 @@ urlpatterns = [
     path('', include('apps.core.urls', namespace='core')),
     path('posts/', include('apps.post.urls', namespace='post')),
     path('groups/', include('apps.group.urls', namespace='group')),
+    path('user/', include('apps.user.urls', namespace='user')),
 ]
 
 if settings.DEBUG:
