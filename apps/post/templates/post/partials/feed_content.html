@@ -1,0 +1,14 @@
+
+<div class="d-flex justify-content-between pt-3 mt-4">
+    <h3 class="h5 text-black">Feeds</h3>
+</div>
+
+<div id="post-list">
+    {% include 'post/partials/post_list.html' %}
+</div>
+
+<div class="d-flex justify-content-center my-4">
+    <div id="spinner" class="spinner-border htmx-indicator" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>

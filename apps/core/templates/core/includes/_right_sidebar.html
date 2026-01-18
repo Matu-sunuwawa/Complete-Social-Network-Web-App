@@ -1,18 +1,45 @@
 {% load static %}
 <div class="col-md-3 col-lg-3 d-none d-lg-block sticky-sidebar">
-  <div class="d-flex align-items-center bg-white rounded-5 p-3">
+
+  <div class="d-flex align-items-center bg-white rounded-5 p-3 shadow-sm">
     <img class="cursor-pointer" src="{% static 'assets/search-24-outlined.svg' %}" alt="">
     <input class="form-control-search" type="text" placeholder="Search...">
   </div>
 
-  <div class="bg-white rounded-5 p-3 mt-3">
-    <h3 class="h5 fw-bold">Suggestions</h3>
-    <div class="d-flex align-items-center justify-content-between pt-2">
-      <div class="d-flex align-items-center gap-2">
-        <img src="{% static 'assets/Group 8.png' %}" alt="">
-        <p class="mb-0">Shigeru Minamoto</p>
+  <div class="bg-white rounded-5 p-3 mt-3 shadow-sm">
+    <h3 class="h5 fw-bold">People to Follow</h3>
+    {% for user in suggested_users %}
+      <div class="d-flex align-items-center justify-content-between pt-2">
+        <div class="d-flex align-items-center gap-2">
+          <img src="{{ user.profile.profile_pic.url }}"
+               class="rounded-circle follower-avatar" alt="">
+          <p class="mb-0">{{ user.username }}</p>
+        </div>
+        <form hx-post="{% url 'user:follow_user' user.username %}" hx-target="this" hx-swap="outerHTML">
+          {% csrf_token %}
+          <button class="btn btn-outline-primary btn-sm">Follow</button>
+        </form>
       </div>
-      <button class="btn btn-outline-primary btn-sm">Follow</button>
-    </div>
+    {% empty %}
+      <p class="text-muted small">No suggestions right now.</p>
+    {% endfor %}
+  </div>
+
+  <div class="bg-white rounded-5 p-3 mt-3 shadow-sm">
+    <h3 class="h5 fw-bold">Groups</h3>
+    {% for group in suggested_groups %}
+      <div class="d-flex align-items-center justify-content-between pt-2">
+        <div class="d-flex align-items-center gap-2">
+          <img src="{% static 'assets/group-icon.svg' %}" alt="">
+          <p class="mb-0">{{ group.name }}</p>
+        </div>
+        <form hx-post="{% url 'group:join_group' group.id %}" hx-target="this" hx-swap="outerHTML">
+          {% csrf_token %}
+          <button class="btn btn-outline-success btn-sm">Join</button>
+        </form>
+      </div>
+    {% empty %}
+      <p class="text-muted small">No groups available.</p>
+    {% endfor %}
   </div>
 </div>

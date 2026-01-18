@@ -9,20 +9,6 @@ from .models import Post, Comment
 import time
 
 
-class PostListView(ListView):
-  model = Post
-  template_name = 'post/partials/post_list.html'
-  context_object_name = 'posts'
-  paginate_by = 10
-
-  def get_queryset(self):
-    time.sleep(1)
-    return super().get_queryset()
-
-  def get_template_names(self):
-    if self.request.headers.get('HX-Request'):
-      return ['post/partials/post_list.html']
-
 class PostCreateView(CreateView):
   model = Post
   fields = ['content', 'image']
@@ -82,6 +68,22 @@ class PostDeleteView(DeleteView):
 
   def get_success_url(self):
     return reverse_lazy('core:home')
+
+
+class FeedListView(ListView):
+  model = Post
+  template_name = "post/feed.html"
+  context_object_name = 'posts'
+  paginate_by = 4
+
+  def get_queryset(self):
+    time.sleep(2)
+    return Post.objects.filter(likes__user=self.request.user).order_by('-likes__created_at')
+
+  def get_template_names(self):
+    if self.request.headers.get('HX-Request'):
+      return ['post/partials/post_list.html']
+    return [self.template_name]
 
 
 def like_post(request, pk):

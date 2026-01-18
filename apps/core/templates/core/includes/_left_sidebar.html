@@ -32,7 +32,10 @@
         <img class="menu-icon" src="{% static 'assets/user-circle-24-outlined.svg' %}" alt="">
         <div class="fw-medium m-0 d-none d-lg-block">Profile</div>
       </a>
-      <a href="#"
+      <a href="{% url 'post:feed_list' %}"
+        hx-get="{% url 'post:feed_list' %}"
+        hx-target="#main-content-area"
+        hx-push-url="true"
         class="d-flex align-items-center justify-content-center justify-content-lg-start
               mb-3 menu-item-link text-decoration-none text-black
               "
