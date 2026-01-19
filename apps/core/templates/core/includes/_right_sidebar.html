@@ -11,14 +11,19 @@
     {% for user in suggested_users %}
       <div class="d-flex align-items-center justify-content-between pt-2">
         <div class="d-flex align-items-center gap-2">
-          <img src="{{ user.profile.profile_pic.url }}"
-               class="rounded-circle follower-avatar" alt="">
-          <p class="mb-0">{{ user.username }}</p>
+          {% if user.profile.profile_pic %}
+            <img src="{{ user.profile.profile_pic.url }}" class="rounded-circle" width="35" height="35" style="object-fit: cover;">
+          {% else %}
+            <img src="{% static 'assets/Group 8.png' %}" class="rounded-circle" width="35" height="35">
+          {% endif %}
+          <p class="mb-0 small fw-bold">{{ user.username }}</p>
         </div>
-        <form hx-post="{% url 'user:follow_user' user.username %}" hx-target="this" hx-swap="outerHTML">
-          {% csrf_token %}
-          <button class="btn btn-outline-primary btn-sm">Follow</button>
-        </form>
+        <button class="btn btn-outline-primary btn-sm"
+                hx-post="{% url 'user:follow_user' user.username %}"
+                hx-target="this"
+                hx-swap="outerHTML">
+          Follow
+        </button>
       </div>
     {% empty %}
       <p class="text-muted small">No suggestions right now.</p>

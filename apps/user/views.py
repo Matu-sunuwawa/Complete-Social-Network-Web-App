@@ -1,12 +1,12 @@
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.views.generic import (
   DetailView, UpdateView, DeleteView
 )
 from django.core.paginator import Paginator
 from django.contrib.auth.models import User
-from django.urls import reverse_lazy
-from .models import UserProfile
+from django.urls import reverse_lazy, reverse
+from .models import UserProfile, Follow
 from apps.post.models import Post
 import time
 
@@ -85,3 +85,30 @@ class ProfileDeleteView(DeleteView):
         response['HX-Redirect'] = self.success_url
         return response
     return super().delete(request, *args, **kwargs)
+
+
+def follow_toggle(request, username):
+  user_to_follow = get_object_or_404(User, username=username)
+  follow_rel = Follow.objects.filter(follower=request.user, following=user_to_follow)
+
+  if follow_rel:
+    follow_rel.delete()
+    action = "Follow"
+    btn_class = "btn-outline-primary"
+  else:
+     Follow.objects.create(follower=request.user, following=user_to_follow)
+     action = "Unfollow"
+     btn_class = "btn-primary"
+
+  if request.headers.get('HX-Request'):
+    post_url = reverse('user:follow_user', kwargs={'username':username})
+    return HttpResponse(f"""
+        <button class="btn {btn_class} btn-sm"
+                hx-post="{post_url}"
+                hx-target="this"
+                hx-swap="outerHTML">
+            {action}
+        </button>
+    """)
+
+  return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

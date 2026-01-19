@@ -9,7 +9,9 @@
     >
     {% csrf_token %}
     <div class="d-flex align-items-center">
-        <img src="{% static 'assets/Group 8.png' %}" alt="">
+        {% if request.user.profile.profile_pic %}
+            <img src="{{ request.user.profile.profile_pic.url }}" class="follower-avatar" alt="Profile">
+        {% endif %}
         <textarea name="content" class="form-control-search" rows="1" placeholder="Share something..." required></textarea>
     </div>
     <div class="border-top d-flex justify-content-between pt-3 mt-3">

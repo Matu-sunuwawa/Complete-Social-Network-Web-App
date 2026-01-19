@@ -4,7 +4,9 @@
   <div id="post-{{ post.id }}" class="bg-white rounded-5 p-3 mt-4 shadow-sm post-card">
     <div class="d-flex justify-content-between py-2">
       <div class="d-flex align-items-center">
-        <img src="{% static 'assets/Group 8.png' %}" alt="">
+        {% if request.user.profile.profile_pic %}
+            <img src="{{ request.user.profile.profile_pic.url }}" class="follower-avatar" alt="Profile">
+        {% endif %}
         <div class="ps-3">
           <h3 class="h5 mb-0">{{post.user.username}}</h3>
           <p class="text-muted small mb-0">{{post.created_at}}</p>
