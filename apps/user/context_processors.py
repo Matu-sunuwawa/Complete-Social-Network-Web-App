@@ -7,3 +7,17 @@ def suggested_users(request):
     suggested = User.objects.exclude(id=request.user.id).exclude(id__in=following_ids)[:5]
     return {'suggested_users':suggested}
   return {'suggested_users': []}
+
+def sidebar_data(request):
+  if request.user.is_authenticated:
+    following_ids = request.user.following.values_list('following_id', flat=True)
+    suggested = User.objects.exclude(id=request.user.id).exclude(id__in=following_ids)[:5]
+    following = User.objects.filter(followers__follower=request.user)
+    return {
+      'suggested_users': suggested,
+      'following_users': following
+    }
+  return {
+    'suggested_users': [],
+    'following_users': []
+  }

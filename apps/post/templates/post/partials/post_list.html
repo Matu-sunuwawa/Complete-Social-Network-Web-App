@@ -54,7 +54,7 @@
     </div>
 
     <p
-      hx-get="{% url 'post:post_detail' post.id %}"
+      hx-get="{% url 'post:post_detail' post.id %}?next={{ request.path }}"
       hx-target="#post-list"
       hx-swap="innerHTML"
       class="cursor-pointer"
@@ -84,7 +84,7 @@
       </div>
       <div
         class="px-2 d-flex align-items-center gap-1 cursor-pointer"
-        hx-get="{% url 'post:post_detail' post.id %}"
+        hx-get="{% url 'post:post_detail' post.id %}?next={{ request.path }}"
         hx-target="#post-list"
         hx-swap="innerHTML"
       >
@@ -97,7 +97,7 @@
 
       <div class="text-center mt-4">
         <span
-          hx-get="{% url 'user:profile_detail' request.user.username %}?page={{ page_obj.next_page_number }}"
+          hx-get="{{ request.path }}?page={{ page_obj.next_page_number }}"
           hx-swap="beforeend"
           hx-target="#post-list"
           hx-select=".post-card"

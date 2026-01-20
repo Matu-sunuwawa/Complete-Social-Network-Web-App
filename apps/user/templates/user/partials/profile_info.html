@@ -11,14 +11,18 @@
             <h3 class="h5 fw-bold mb-0">{{ profile_user.username }}</h3>
             <p class="small pt-1">{{ profile_user.profile.bio|default:"No bio yet." }}</p>
         </div>
-        <div class="d-flex gap-4">
-            <div>
-                <strong>{{ profile_user.profile.following_count|default:0 }}</strong>
-                <span class="text-muted">Following</span>
-            </div>
-            <div>
-                <strong>{{ profile_user.profile.followers_count|default:0 }}</strong>
+        <div class="d-flex gap-4 mt-3">
+            <div class="cursor-pointer">
+                <span class="fw-bold">{{ profile_user.followers.count }}</span>
                 <span class="text-muted">Followers</span>
+            </div>
+
+            <div class="cursor-pointer"
+                hx-get="{% url 'user:user_following' profile_user.username %}"
+                hx-target="#profile-tabs-container"
+                hx-swap="outerHTML">
+                <span class="fw-bold">{{ profile_user.following.count }}</span>
+                <span class="text-muted">Following</span>
             </div>
         </div>
     </div>

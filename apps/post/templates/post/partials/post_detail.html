@@ -2,7 +2,7 @@
 
 <div class="d-flex align-items-center mb-3">
   <button class="btn btn-link text-decoration-none text-primary p-0"
-          hx-get="{% url 'core:home' %}"
+          hx-get="{{ back_url }}"
           hx-target="#post-list"
           hx-swap="innerHTML">
     ← Back

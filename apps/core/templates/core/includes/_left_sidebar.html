@@ -47,10 +47,23 @@
 
     <div class="text-start px-3 mt-4 border-top pt-3">
       <h3 class="h6 fw-bold mb-3">Followings</h3>
-      <div class="d-flex align-items-center mb-2">
-        <img src="{% static 'assets/Group 8.png' %}" class="rounded-circle me-2 follower-avatar" alt="Follower">
-        <small class="m-0">Shigeru Minamoto</small>
+
+      <div id="following-list">
+        {% for following in following_users %}
+          <a href="{% url 'user:profile_detail' following.username %}"
+            class="d-flex align-items-center mb-2 text-decoration-none text-black">
+            {% if following.profile.profile_pic %}
+              <img src="{{ following.profile.profile_pic.url }}" class="rounded-circle me-2 follower-avatar" alt="">
+            {% else %}
+              <img src="{% static 'assets/Group 8.png' %}" class="rounded-circle me-2 follower-avatar" alt="">
+            {% endif %}
+            <small class="m-0">{{ following.username }}</small>
+          </a>
+        {% empty %}
+          <p class="text-muted small">You aren't following anyone yet.</p>
+        {% endfor %}
       </div>
+
     </div>
   </div>
 </div>

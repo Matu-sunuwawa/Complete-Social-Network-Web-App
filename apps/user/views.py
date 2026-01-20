@@ -112,3 +112,34 @@ def follow_toggle(request, username):
     """)
 
   return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+# def user_following_list(request, username):
+#   profile_user = get_object_or_404(User, username=username)
+#   following_list = User.objects.filter(followers__follower=profile_user)
+
+#   context = {
+#       'profile_user': profile_user,
+#       'following_list': following_list,
+#   }
+
+#   if request.headers.get('HX-Request'):
+#       return render(request, 'user/partials/following_tab.html', context)
+#   return HttpResponseRedirect(reverse('user:profile_detail', args=[username]))
+
+def user_following_list(request, username):
+    profile_user = get_object_or_404(User, username=username)
+    following_list = User.objects.filter(followers__follower=profile_user)
+
+    current_user_following_ids = []
+    if request.user.is_authenticated:
+        current_user_following_ids = request.user.following.values_list('following_id', flat=True)
+
+    context = {
+        'profile_user': profile_user,
+        'following_list': following_list,
+        'current_user_following_ids': current_user_following_ids,
+    }
+
+    if request.headers.get('HX-Request'):
+        return render(request, 'user/partials/following_tab.html', context)
+    return HttpResponseRedirect(reverse('user:profile_detail', args=[username]))

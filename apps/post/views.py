@@ -34,6 +34,11 @@ class PostDetailView(DetailView):
   context_object_name = 'post'
   model = Post
 
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    context['back_url'] = self.request.GET.get('next', reverse_lazy('core:home'))
+    return context
+
   def get_template_names(self):
     time.sleep(1)
     if self.request.headers.get('HX-Request'):
@@ -81,7 +86,10 @@ class FeedListView(ListView):
     return Post.objects.filter(likes__user=self.request.user).order_by('-likes__created_at')
 
   def get_template_names(self):
+    trigger_target = self.request.headers.get('HX-Target')
     if self.request.headers.get('HX-Request'):
+      if trigger_target == "main-content-area":
+        return ['post/partials/feed_content.html']
       return ['post/partials/post_list.html']
     return [self.template_name]
 

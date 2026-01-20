@@ -9,4 +9,5 @@ urlpatterns = [
     path('delete-profile/', ProfileDeleteView.as_view(), name="profile_delete"),
 
     path('follow_user/<str:username>/', follow_toggle, name="follow_user"),
+    path('profile/<str:username>/following/', user_following_list, name="user_following"),
 ]
