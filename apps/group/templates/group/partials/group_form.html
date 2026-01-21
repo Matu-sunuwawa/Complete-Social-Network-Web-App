@@ -1,0 +1,29 @@
+<div class="modal-header border-0 pb-0">
+    <h5 class="modal-title fw-bold">Create New Group</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body">
+    <form hx-post="{% url 'group:group_create' %}"
+          hx-target="#modal-content-target">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label for="id_name" class="form-label small fw-bold">Group Name</label>
+            <input type="text" name="name" id="id_name" class="form-control rounded-4"
+                   value="{{ form.name.value|default:'' }}" required>
+            {% if form.name.errors %}<div class="text-danger small">{{ form.name.errors }}</div>{% endif %}
+        </div>
+
+        <div class="mb-3">
+            <label for="id_description" class="form-label small fw-bold">Description</label>
+            <textarea name="description" id="id_description" class="form-control rounded-4" rows="3">{{ form.description.value|default:'' }}</textarea>
+            {% if form.description.errors %}<div class="text-danger small">{{ form.description.errors }}</div>{% endif %}
+        </div>
+
+        <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-primary rounded-pill py-2">
+                Create Group
+            </button>
+        </div>
+    </form>
+</div>

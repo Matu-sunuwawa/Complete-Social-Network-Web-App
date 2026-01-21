@@ -43,6 +43,17 @@
         <img class="menu-icon" src="{% static 'assets/grid-2x2-24-outlined.svg' %}" alt="">
         <div class="fw-medium m-0 d-none d-lg-block">Feeds</div>
       </a>
+      <a href="{% url 'group:group_list' %}"
+        hx-get="{% url 'group:group_list' %}"
+        hx-target="#main-content-area"
+        hx-push-url="true"
+        class="d-flex align-items-center justify-content-center justify-content-lg-start
+              mb-3 menu-item-link text-decoration-none text-black
+              "
+      >
+        <img class="menu-icon" src="{% static 'assets/users-24-outlined.svg' %}" alt="">
+        <div class="fw-medium m-0 d-none d-lg-block">Groups</div>
+      </a>
     </div>
 
     <div class="text-start px-3 mt-4 border-top pt-3">

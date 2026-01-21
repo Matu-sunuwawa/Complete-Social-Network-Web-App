@@ -35,13 +35,15 @@
     {% for group in suggested_groups %}
       <div class="d-flex align-items-center justify-content-between pt-2">
         <div class="d-flex align-items-center gap-2">
-          <img src="{% static 'assets/group-icon.svg' %}" alt="">
-          <p class="mb-0">{{ group.name }}</p>
+          <img src="{% static 'assets/users-24-outlined.svg' %}" width="20" alt="">
+          <p class="mb-0 small fw-bold">{{ group.name }}</p>
         </div>
-        <form hx-post="{% url 'group:join_group' group.id %}" hx-target="this" hx-swap="outerHTML">
-          {% csrf_token %}
-          <button class="btn btn-outline-success btn-sm">Join</button>
-        </form>
+        <button class="btn btn-outline-success btn-sm rounded-pill px-3"
+                hx-post="{% url 'group:group_toggle' group.id %}"
+                hx-target="this"
+                hx-swap="outerHTML">
+          Join
+        </button>
       </div>
     {% empty %}
       <p class="text-muted small">No groups available.</p>

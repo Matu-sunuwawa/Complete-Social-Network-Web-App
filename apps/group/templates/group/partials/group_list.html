@@ -1,0 +1,41 @@
+<div id="profile-tabs-container">
+    <div class="d-flex justify-content-between pt-3 mt-4">
+        <h3 class="h5 text-black">
+            {% if current_tab == 'discover' %}Suggested Groups{% else %}My Groups{% endif %}
+        </h3>
+    </div>
+
+    <div class="row mt-3">
+        {% for group in groups %}
+            <div class="col-md-6 mb-3">
+                <div class="bg-white p-3 rounded-5 shadow-sm border h-100 d-flex flex-column">
+                    <h4 class="h6 fw-bold mb-1">{{ group.name }}</h4>
+                    <p class="text-muted small mb-3">{{ group.description|truncatechars:60 }}</p>
+
+                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                        <span class="small text-primary">{{ group.num_member }} members</span>
+
+                        {% if request.user == group.created_by %}
+                            <span class="badge bg-light text-dark border rounded-pill">Admin</span>
+                        {% else %}
+                            <button class="btn btn-sm {% if group.id in joined_group_ids %}btn-success{% else %}btn-outline-success{% endif %} rounded-pill px-3"
+                                    hx-post="{% url 'group:group_toggle' group.id %}"
+                                    hx-target="this"
+                                    hx-swap="outerHTML">
+                                {% if group.id in joined_group_ids %}
+                                    Leave
+                                {% else %}
+                                    Join
+                                {% endif %}
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <div class="col-12 text-center py-5">
+                <p class="text-muted">No groups found here.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
