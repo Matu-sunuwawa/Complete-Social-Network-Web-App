@@ -7,24 +7,25 @@
   <div class="bg-white rounded-5 p-3 mt-4 shadow-sm">
     {% for user_following in following_list %}
       <div class="d-flex align-items-center justify-content-between py-3 {% if not forloop.last %}border-bottom{% endif %}">
-        <div class="d-flex align-items-center gap-3">
+
+        <a href="{% url 'user:profile_detail' user_following.username %}"
+           hx-get="{% url 'user:profile_detail' user_following.username %}"
+           hx-target="#main-content-area"
+           hx-push-url="true"
+           class="d-flex align-items-center gap-3 text-decoration-none text-black">
           <img src="{% if user_following.profile.profile_pic %}{{ user_following.profile.profile_pic.url }}{% else %}{% static 'assets/Group 8.png' %}{% endif %}"
                 class="rounded-circle" width="45" height="45" style="object-fit: cover;">
           <div>
             <p class="mb-0 fw-bold">{{ user_following.username }}</p>
             <small class="text-muted">{{ user_following.profile.bio|truncatechars:40 }}</small>
           </div>
-        </div>
+        </a>
 
         <button class="btn {% if user_following.id in current_user_following_ids %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm rounded-pill px-3"
                 hx-post="{% url 'user:follow_user' user_following.username %}"
                 hx-target="this"
                 hx-swap="outerHTML">
-            {% if user_following.id in current_user_following_ids %}
-                Unfollow
-            {% else %}
-                Follow
-            {% endif %}
+            {% if user_following.id in current_user_following_ids %}Unfollow{% else %}Follow{% endif %}
         </button>
       </div>
     {% empty %}

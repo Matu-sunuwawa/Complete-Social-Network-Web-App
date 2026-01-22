@@ -12,7 +12,10 @@
             <p class="small pt-1">{{ profile_user.profile.bio|default:"No bio yet." }}</p>
         </div>
         <div class="d-flex gap-4 mt-3">
-            <div class="cursor-pointer">
+            <div class="cursor-pointer"
+                hx-get="{% url 'user:user_followers' profile_user.username %}"
+                hx-target="#profile-tabs-container"
+                hx-swap="outerHTML">
                 <span class="fw-bold">{{ profile_user.followers.count }}</span>
                 <span class="text-muted">Followers</span>
             </div>

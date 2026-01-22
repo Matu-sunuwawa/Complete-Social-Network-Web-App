@@ -10,4 +10,5 @@ urlpatterns = [
 
     path('follow_user/<str:username>/', follow_toggle, name="follow_user"),
     path('profile/<str:username>/following/', user_following_list, name="user_following"),
+    path('profile/<str:username>/followers/', user_followers_list, name='user_followers'),
 ]

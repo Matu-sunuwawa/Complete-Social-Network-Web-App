@@ -1,6 +1,5 @@
 {% load static %}
 <div class="col-md-3 col-lg-3 d-none d-lg-block sticky-sidebar">
-
   <div class="d-flex align-items-center bg-white rounded-5 p-3 shadow-sm">
     <img class="cursor-pointer" src="{% static 'assets/search-24-outlined.svg' %}" alt="">
     <input class="form-control-search" type="text" placeholder="Search...">
@@ -10,23 +9,22 @@
     <h3 class="h5 fw-bold">People to Follow</h3>
     {% for user in suggested_users %}
       <div class="d-flex align-items-center justify-content-between pt-2">
-        <div class="d-flex align-items-center gap-2">
-          {% if user.profile.profile_pic %}
-            <img src="{{ user.profile.profile_pic.url }}" class="rounded-circle" width="35" height="35" style="object-fit: cover;">
-          {% else %}
-            <img src="{% static 'assets/Group 8.png' %}" class="rounded-circle" width="35" height="35">
-          {% endif %}
+        <a href="{% url 'user:profile_detail' user.username %}"
+           hx-get="{% url 'user:profile_detail' user.username %}"
+           hx-target="#main-content-area"
+           hx-push-url="true"
+           class="d-flex align-items-center gap-2 text-decoration-none text-black">
+          <img src="{% if user.profile.profile_pic %}{{ user.profile.profile_pic.url }}{% else %}{% static 'assets/Group 8.png' %}{% endif %}"
+               class="rounded-circle" width="35" height="35" style="object-fit: cover;">
           <p class="mb-0 small fw-bold">{{ user.username }}</p>
-        </div>
-        <button class="btn btn-outline-primary btn-sm"
+        </a>
+        <button class="btn btn-outline-primary btn-sm rounded-pill"
                 hx-post="{% url 'user:follow_user' user.username %}"
                 hx-target="this"
                 hx-swap="outerHTML">
           Follow
         </button>
       </div>
-    {% empty %}
-      <p class="text-muted small">No suggestions right now.</p>
     {% endfor %}
   </div>
 
@@ -34,10 +32,16 @@
     <h3 class="h5 fw-bold">Groups</h3>
     {% for group in suggested_groups %}
       <div class="d-flex align-items-center justify-content-between pt-2">
-        <div class="d-flex align-items-center gap-2">
-          <img src="{% static 'assets/users-24-outlined.svg' %}" width="20" alt="">
+        <a href="{% url 'group:group_list' %}"
+           hx-get="{% url 'group:group_list' %}"
+           hx-target="#main-content-area"
+           hx-push-url="true"
+           class="d-flex align-items-center gap-2 text-decoration-none text-black">
+          <div class="bg-light rounded-circle p-1">
+             <img src="{% static 'assets/users-24-outlined.svg' %}" width="20" alt="">
+          </div>
           <p class="mb-0 small fw-bold">{{ group.name }}</p>
-        </div>
+        </a>
         <button class="btn btn-outline-success btn-sm rounded-pill px-3"
                 hx-post="{% url 'group:group_toggle' group.id %}"
                 hx-target="this"
@@ -45,8 +49,6 @@
           Join
         </button>
       </div>
-    {% empty %}
-      <p class="text-muted small">No groups available.</p>
     {% endfor %}
   </div>
 </div>

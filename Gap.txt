@@ -6,9 +6,11 @@
 5. HTMX page url is not updating
 
 # Quick fixes
-1. left side menus pages are not created yet
+1. left side menus pages are not created yet  [DONE]
   - home  [DONE]
   - profile  [DONE]
-  - feed
-2. images for users are statics
-3. user follows other users
+  - feed  [DONE]
+  - group  [DONE]
+2. images for users are statics  [DONE]
+3. user follows other users  [DONE]
+4. Update profile not updating the left sidebar

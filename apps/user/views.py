@@ -29,7 +29,8 @@ class ProfileDetailView(DetailView):
   def get_context_data(self, **kwargs):
       time.sleep(1)
       context = super().get_context_data(**kwargs)
-      posts = Post.objects.all()
+      profile_user = self.get_object()
+      posts = Post.objects.filter(user=profile_user).order_by('-created_at')
       paginator = Paginator(posts, 3)
       page_num = self.request.GET.get('page',1)
       page_obj = paginator.get_page(page_num)
@@ -142,4 +143,22 @@ def user_following_list(request, username):
 
     if request.headers.get('HX-Request'):
         return render(request, 'user/partials/following_tab.html', context)
+    return HttpResponseRedirect(reverse('user:profile_detail', args=[username]))
+
+def user_followers_list(request, username):
+    profile_user = get_object_or_404(User, username=username)
+    followers_list = User.objects.filter(following__following=profile_user)
+
+    current_user_following_ids = []
+    if request.user.is_authenticated:
+        current_user_following_ids = request.user.following.values_list('following_id', flat=True)
+
+    context = {
+        'profile_user': profile_user,
+        'followers_list': followers_list,
+        'current_user_following_ids': current_user_following_ids,
+    }
+
+    if request.headers.get('HX-Request'):
+        return render(request, 'user/partials/followers_tab.html', context)
     return HttpResponseRedirect(reverse('user:profile_detail', args=[username]))
