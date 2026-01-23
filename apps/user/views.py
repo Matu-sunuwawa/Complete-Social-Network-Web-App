@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
+from django.template.loader import render_to_string
 from django.views.generic import (
   DetailView, UpdateView, DeleteView
 )
@@ -64,9 +65,15 @@ class ProfileUpdateView(UpdateView):
     self.object = form.save()
 
     if self.request.headers.get('HX-Request'):
-        return render(self.request, 'user/partials/profile_info.html', {
-            'profile_user': self.request.user
+        profile_info_html = render_to_string('user/partials/profile_info.html', {
+            'profile_user': self.request.user,
+            'request': self.request
         })
+        sidebar_info_html = render_to_string('core/includes/_sidebar_user_info.html', {
+            'request': self.request
+        })
+        return HttpResponse(profile_info_html + sidebar_info_html)
+
     return super().form_valid(form)
 
 class ProfileDeleteView(DeleteView):
