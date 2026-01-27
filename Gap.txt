@@ -16,3 +16,4 @@
 4. Update profile not updating the left sidebar  [DONE]
 5. use user id `uuid` instead of use username on the url.
 6. update the url of page.
+7. create posts inside group.

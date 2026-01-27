@@ -72,7 +72,12 @@ class ProfileUpdateView(UpdateView):
         sidebar_info_html = render_to_string('core/includes/_sidebar_user_info.html', {
             'request': self.request
         })
-        return HttpResponse(profile_info_html + sidebar_info_html)
+        response = HttpResponse(profile_info_html + sidebar_info_html)
+
+        new_profile_url = reverse('user:profile_detail', kwargs={'username': self.request.user.username})
+        response['HX-Replace-Url'] = new_profile_url
+
+        return response
 
     return super().form_valid(form)
 
