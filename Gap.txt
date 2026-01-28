@@ -3,7 +3,7 @@
 2. watched posts [views]
 3. Notification
 4. Pagination loading  [not using `time`, use `best method`]
-5. HTMX page url is not updating
+5. HTMX page url is not updating  [FIXED]
 
 # Quick fixes
 1. left side menus pages are not created yet  [DONE]
@@ -15,5 +15,8 @@
 3. user follows other users  [DONE]
 4. Update profile not updating the left sidebar  [DONE]
 5. use user id `uuid` instead of use username on the url.
-6. update the url of page.
+6. update the url of page.  [DONE]
 7. create posts inside group.
+   - on first click of the group left menu: show feed(the posts from the group that user joined)
+   - make the your group and discover clickable.
+   - pagination on list of feed group posts

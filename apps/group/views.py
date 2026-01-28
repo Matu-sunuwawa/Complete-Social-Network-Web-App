@@ -9,40 +9,44 @@ from django.contrib.auth.models import User
 
 from django.db.models import Q
 from apps.group.models import Group, Membership
+from apps.post.models import Post
 import time
 
 
 class GroupListView(ListView):
-  model = Group
-  template_name = 'group/group.html'
-  context_object_name = 'groups'
+    model = Group
+    template_name = 'group/group.html'
+    context_object_name = 'groups'
 
-  def get_queryset(self):
-    user = self.request.user
-    tab = self.request.GET.get('tab', 'your_groups')
+    def get_queryset(self):
+        user = self.request.user
+        tab = self.request.GET.get('tab', '')
 
-    if tab == 'discover':
-        return Group.objects.exclude(memberships__user=user)
-    else:
+        if tab == 'discover':
+            return Group.objects.exclude(memberships__user=user)
         return Group.objects.filter(Q(created_by=user) | Q(memberships__user=user)).distinct()
 
-  def get_template_names(self):
-    target = self.request.headers.get('HX-Target')
-    if self.request.headers.get('HX-Request'):
-        if target == "main-content-area":
-            return ['group/partials/group_content.html']
-        return ['group/partials/group_list.html']
-    return [self.template_name]
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        tab = self.request.GET.get('tab', '')
+        context['current_tab'] = tab
 
-  def get_context_data(self, **kwargs):
-    context = super().get_context_data(**kwargs)
-    context['current_tab'] = self.request.GET.get('tab', 'your_groups')
+        if tab == '':
+            joined_groups = self.get_queryset()
 
-    if self.request.user.is_authenticated:
-        context['joined_group_ids'] = self.request.user.memberships.values_list('group_id', flat=True)
-    else:
-        context['joined_group_ids'] = []
-    return context
+            context['posts'] = Post.objects.filter(group__in=joined_groups).exclude(group__isnull=True).select_related('user', 'group').order_by('-created_at')
+
+        if self.request.user.is_authenticated:
+            context['joined_group_ids'] = self.request.user.memberships.values_list('group_id', flat=True)
+        return context
+
+    def get_template_names(self):
+        target = self.request.headers.get('HX-Target')
+        if self.request.headers.get('HX-Request'):
+            if target == "main-content-area":
+                return ['group/partials/group_content.html']
+            return ['group/partials/group_list.html']
+        return [self.template_name]
 
 class GroupCreateView(CreateView):
     model = Group
