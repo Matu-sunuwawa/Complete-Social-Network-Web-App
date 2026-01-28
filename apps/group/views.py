@@ -27,6 +27,7 @@ class GroupListView(ListView):
         return Group.objects.filter(Q(created_by=user) | Q(memberships__user=user)).distinct()
 
     def get_context_data(self, **kwargs):
+        time.sleep(1)
         context = super().get_context_data(**kwargs)
         tab = self.request.GET.get('tab', '')
         context['current_tab'] = tab
@@ -34,7 +35,15 @@ class GroupListView(ListView):
         if tab == '':
             joined_groups = self.get_queryset()
 
-            context['posts'] = Post.objects.filter(group__in=joined_groups).exclude(group__isnull=True).select_related('user', 'group').order_by('-created_at')
+            posts = Post.objects.filter(group__in=joined_groups).exclude(
+                group__isnull=True).select_related('user', 'group').order_by('-created_at')
+            paginator = Paginator(posts, 3)
+            page_num = self.request.GET.get('page', 1)
+            page_obj = paginator.get_page(page_num)
+
+            context['posts'] = page_obj.object_list
+            context['page_obj'] = page_obj
+            return context
 
         if self.request.user.is_authenticated:
             context['joined_group_ids'] = self.request.user.memberships.values_list('group_id', flat=True)
