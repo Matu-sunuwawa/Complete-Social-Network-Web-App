@@ -1,16 +1,19 @@
 {% load static %}
 
 <div class="d-flex align-items-center mb-3">
-  <button class="btn btn-link text-decoration-none text-primary p-0"
-          hx-get="{% url 'core:home' %}"
-          hx-target="#post-list"
-          hx-swap="innerHTML">
+  <a
+    href="{{ back_url }}"
+    class="btn btn-link text-decoration-none text-primary p-0"
+    hx-get="{{ back_url }}"
+    hx-target="#main-content-area"
+    hx-push-url="true"
+  >
     ← Back
-  </button>
+  </a>
 </div>
 
-<form hx-post="{% url 'post:post_update' post.id %}"
-      hx-target="#post-list"
+<form hx-post="{% url 'post:post_update' post.id %}?next={{ back_url }}"
+      hx-target="#main-content-area"
       hx-encoding="multipart/form-data"
       class="bg-white rounded-5 p-3 mb-4">
     {% csrf_token %}

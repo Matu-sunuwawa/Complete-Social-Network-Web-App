@@ -30,9 +30,11 @@
           <ul class="dropdown-menu dropdown-menu-end border-0 shadow-sm rounded-4" aria-labelledby="postMenu{{ post.id }}">
             {% if post.user == request.user %}
               <li>
-                <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="#"
-                    hx-get="{% url 'post:post_update' post.id %}"
-                    hx-target="#post-list"
+                <a class="dropdown-item d-flex align-items-center gap-2 py-2"
+                    href="{% url 'post:post_update' post.id %}?next={{ request.path }}"
+                    hx-get="{% url 'post:post_update' post.id %}?next={{ request.path }}"
+                    hx-target="#main-content-area"
+                    hx-push-url="true"
                 >
                   <small>Edit Post</small>
                 </a>
@@ -53,14 +55,15 @@
       </div>
     </div>
 
-    <p
+    <div
+      role="button"
       hx-get="{% url 'post:post_detail' post.id %}?next={{ request.path }}"
-      hx-target="#post-list"
-      hx-swap="innerHTML"
+      hx-target="#main-content-area"
+      hx-push-url="true"
       class="cursor-pointer"
     >
       {{post.content}}
-    </p>
+    </div>
 
     <div class="post-gallery">
       {% if post.image %}
@@ -85,8 +88,8 @@
       <div
         class="px-2 d-flex align-items-center gap-1 cursor-pointer"
         hx-get="{% url 'post:post_detail' post.id %}?next={{ request.path }}"
-        hx-target="#post-list"
-        hx-swap="innerHTML"
+        hx-target="#main-content-area"
+        hx-push-url="true"
       >
         <img src="{% static 'assets/rocketchat-24-outlined.svg' %}" alt="">
         Comment

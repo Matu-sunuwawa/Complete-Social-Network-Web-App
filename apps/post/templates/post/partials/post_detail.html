@@ -1,12 +1,15 @@
 {% load static %}
 
 <div class="d-flex align-items-center mb-3">
-  <button class="btn btn-link text-decoration-none text-primary p-0"
-          hx-get="{{ back_url }}"
-          hx-target="#post-list"
-          hx-swap="innerHTML">
+  <a
+    href="{{ back_url }}"
+    class="btn btn-link text-decoration-none text-primary p-0"
+    hx-get="{{ back_url }}"
+    hx-target="#main-content-area"
+    hx-push-url="true"
+  >
     ← Back
-  </button>
+  </a>
 </div>
 
 <div class="bg-white rounded-5 p-3 mt-4 shadow-sm post-card">

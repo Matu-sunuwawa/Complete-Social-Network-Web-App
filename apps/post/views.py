@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import (
   ListView, DetailView, CreateView,
   UpdateView, DeleteView
@@ -33,6 +33,7 @@ class PostCreateView(CreateView):
 class PostDetailView(DetailView):
   context_object_name = 'post'
   model = Post
+  template_name = 'post/post_detail.html'
 
   def get_context_data(self, **kwargs):
     context = super().get_context_data(**kwargs)
@@ -43,17 +44,33 @@ class PostDetailView(DetailView):
     time.sleep(1)
     if self.request.headers.get('HX-Request'):
       return ['post/partials/post_detail.html']
+    return [self.template_name]
 
 class PostUpdateView(UpdateView):
   model = Post
   fields = ['content', 'image']
+  template_name = 'post/post_update.html'
+
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    context['back_url'] = self.request.GET.get('next', reverse('core:home'))
+    return context
 
   def get_template_names(self):
     if self.request.headers.get('HX-Request'):
       return ['post/partials/post_update.html']
+    return [self.template_name]
 
-  def get_success_url(self):
-    return reverse_lazy('core:home')
+  def form_valid(self, form):
+    self.object = form.save()
+
+    if self.request.headers.get('HX-Request'):
+        next_url = self.request.GET.get('next', reverse('core:home'))
+        response = HttpResponse()
+        response['HX-Location'] = next_url
+        return response
+
+    return super().form_valid(form)
 
 class PostDeleteView(DeleteView):
   model = Post
