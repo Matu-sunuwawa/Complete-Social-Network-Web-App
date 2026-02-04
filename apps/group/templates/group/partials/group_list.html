@@ -9,7 +9,15 @@
         {% for group in groups %}
             <div class="col-md-6 mb-3">
                 <div class="bg-white p-3 rounded-5 shadow-sm border h-100 d-flex flex-column">
-                    <h4 class="h6 fw-bold mb-1">{{ group.name }}</h4>
+                    <h4 class="h6 fw-bold mb-1">
+                        <span role="button"
+                            class="text-dark cursor-pointer hover-underline"
+                            hx-get="{% url 'group:group_list' %}?tab=group_detail&group_id={{ group.id }}&source={{ current_tab }}"
+                            hx-target="#main-content-area"
+                            hx-push-url="true">
+                            {{ group.name }}
+                        </span>
+                    </h4>
                     <p class="text-muted small mb-3">{{ group.description|truncatechars:60 }}</p>
 
                     <div class="d-flex justify-content-between align-items-center mt-auto">

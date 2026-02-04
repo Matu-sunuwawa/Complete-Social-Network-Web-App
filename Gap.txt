@@ -16,7 +16,7 @@
 4. Update profile not updating the left sidebar  [DONE]
 5. use user id `uuid` instead of use username on the url.
 6. update the url of page.  [DONE]
-7. create posts inside group.
-   - on first click of the group left menu: show feed(the posts from the group that user joined)
-   - make the your group and discover clickable.
-   - pagination on list of feed group posts
+7. create posts inside group.  [DONE]
+   - on first click of the group left menu: show feed(the posts from the group that user joined)  [DONE]
+   - make the your group and discover clickable.  [DONE]
+   - pagination on list of feed group posts  [DONE]

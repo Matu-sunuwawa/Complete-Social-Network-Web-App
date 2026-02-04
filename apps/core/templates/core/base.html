@@ -37,6 +37,15 @@
               modal.show();
           }
       });
+        document.body.addEventListener('closeModal', function() {
+            const modalElement = document.getElementById('modal-content-target').closest('.modal');
+            if (modalElement) {
+                const modalInstance = bootstrap.Modal.getInstance(modalElement);
+                if (modalInstance) {
+                    modalInstance.hide();
+                }
+            }
+        });
 
       function updateActiveLinks() {
           const currentPath = window.location.pathname;

@@ -1,22 +1,64 @@
 <div class="d-flex justify-content-between align-items-center">
-    <div class="d-flex gap-2">
-        <button class="btn {% if current_tab == 'your_groups' %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill px-4"
-                hx-get="{% url 'group:group_list' %}?tab=your_groups"
-                hx-target="#profile-tabs-container">
-            Your Groups
-        </button>
+    {% if current_tab == 'group_detail' %}
+        <div class="d-flex align-items-center gap-3">
+            <button class="btn btn-light rounded-circle"
+                    hx-get="{% url 'group:group_list' %}?tab={{ back_tab }}"
+                    hx-target="#main-content-area"
+                    hx-push-url="true">
+                ←
+            </button>
+            <div>
+                <h2 class="h4 mb-0 fw-bold">{{ current_group.name }}</h2>
+                <span class="text-muted small">{{ current_group.num_member }} members</span>
+            </div>
+        </div>
 
-        <button class="btn {% if current_tab == 'discover' %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill px-4"
-                hx-get="{% url 'group:group_list' %}?tab=discover"
-                hx-target="#profile-tabs-container">
-            Discover
-        </button>
-    </div>
+        <div>
+            {% if request.user == current_group.created_by %}
+                <button class="btn btn-outline-secondary rounded-pill px-4"
+                        hx-get="{% url 'group:group_update' current_group.id %}"
+                        hx-target="#modal-content-target"
+                >
+                    Settings
+                </button>
+            {% else %}
+                <button class="btn {% if current_group.id in joined_group_ids %}btn-success{% else %}btn-outline-success{% endif %} rounded-pill px-4"
+                        hx-post="{% url 'group:group_toggle' current_group.id %}"
+                        hx-target="this"
+                        hx-swap="outerHTML">
+                    {% if current_group.id in joined_group_ids %}Leave{% else %}Join{% endif %}
+                </button>
+            {% endif %}
+        </div>
 
-    <div>
-        <button class="btn btn-success rounded-pill px-4"
-                hx-get="{% url 'group:group_create' %}"
-                hx-target="#modal-content-target"> + Create Group
-        </button>
-    </div>
+    {% else %}
+        <div class="d-flex gap-2">
+            <button class="btn {% if current_tab == '' %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill px-4"
+                    hx-get="{% url 'group:group_list' %}"
+                    hx-target="#main-content-area"
+                    hx-push-url="true">
+                Feed
+            </button>
+            <button class="btn {% if current_tab == 'your_groups' %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill px-4"
+                    hx-get="{% url 'group:group_list' %}?tab=your_groups"
+                    hx-target="#main-content-area"
+                    hx-push-url="true">
+                Your Groups
+            </button>
+            <button class="btn {% if current_tab == 'discover' %}btn-primary{% else %}btn-outline-primary{% endif %} rounded-pill px-4"
+                    hx-get="{% url 'group:group_list' %}?tab=discover"
+                    hx-target="#main-content-area"
+                    hx-push-url="true">
+                Discover
+            </button>
+        </div>
+
+        <div>
+            <button class="btn btn-success rounded-pill px-4"
+                    hx-get="{% url 'group:group_create' %}"
+                    hx-target="#modal-content-target">
+                + Create Group
+            </button>
+        </div>
+    {% endif %}
 </div>

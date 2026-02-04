@@ -1,15 +1,20 @@
 <div class="bg-white rounded-5 p-4 mb-4 shadow-sm" id="profile-info-section">
-    {% include 'group/partials/group_header.html' with profile_user=groups %}
+    {% include 'group/partials/group_header.html' %}
 </div>
 
 <div id="profile-tabs-container">
-    <div class="d-flex justify-content-between pt-3 mt-4">
-        <h3 class="h5 text-black">Groups Feeds</h3>
-    </div>
-
-    <div id="post-list">
-        {% include 'post/partials/post_list.html' %}
-    </div>
+    {% if current_tab == '' or current_tab == 'group_detail' %}
+        <div class="pt-3 mt-4">
+            <h3 class="h5 text-black">
+                {% if current_tab == 'group_detail' %}Group Posts{% else %}Group Feed{% endif %}
+            </h3>
+        </div>
+        <div id="post-list">
+            {% include 'post/partials/post_list.html' %}
+        </div>
+    {% else %}
+        {% include 'group/partials/group_list.html' %}
+    {% endif %}
 </div>
 
 <div class="d-flex justify-content-center my-4">
