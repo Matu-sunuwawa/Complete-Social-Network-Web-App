@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import (
   ListView, CreateView,
-  UpdateView
+  UpdateView, DeleteView
 )
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponse, HttpResponseRedirect
@@ -72,7 +72,9 @@ class GroupCreateView(CreateView):
     model = Group
     fields = ['name', 'description']
     template_name = 'group/partials/group_form.html'
-    success_url = reverse_lazy('group:group_list')
+
+    def get_success_url(self):
+        return f"{reverse('group:group_list')}?tab=group_detail&group_id={self.object.id}"
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
@@ -88,8 +90,7 @@ class GroupCreateView(CreateView):
             })
             response['HX-Trigger'] = 'closeModal'
             return response
-
-        return super().form_valid(form)
+        return HttpResponseRedirect(self.get_success_url())
 
 class GroupUpdateView(UpdateView):
     model = Group
@@ -114,6 +115,26 @@ class GroupUpdateView(UpdateView):
             response['HX-Trigger'] = 'closeModal'
             return response
         return super().form_valid(form)
+
+class GroupDeleteView(DeleteView):
+    model = Group
+    template_name = 'group/partials/group_delete_confirm.html'
+    success_url = reverse_lazy('group:group_list')
+
+    def get_queryset(self):
+        return self.model.objects.filter(created_by=self.request.user)
+
+    def form_valid(self, form):
+        success_url = self.get_success_url()
+        self.object.delete()
+        if self.request.headers.get('HX-Request'):
+            response = HttpResponse()
+            response['HX-Location'] = json.dumps({
+                'path': f"{reverse('group:group_list')}?tab=your_groups",
+                'target': '#main-content-area'
+            })
+            return response
+        return HttpResponseRedirect(success_url)
 
 
 def group_membership_toggle(request, pk):

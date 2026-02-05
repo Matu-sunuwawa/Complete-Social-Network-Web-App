@@ -1,19 +1,25 @@
 {% load static %}
 
-<div class="d-flex align-items-center mb-3">
-  <button class="btn btn-link text-decoration-none text-primary p-0"
-          hx-get="{% url 'core:home' %}"
-          hx-target="#post-list"
-          hx-swap="innerHTML">
-    ← Back
-  </button>
-</div>
+{% if group_id %}
+    <div class="d-flex align-items-center mb-3">
+    <button class="btn btn-link text-decoration-none text-primary p-0"
+            hx-get="{% url 'group:group_list' %}?tab=group_detail&group_id={{ group_id }}"
+            hx-target="#main-content-area"
+            hx-push-url="true">
+        ← Back to Group
+    </button>
+    </div>
+{% endif %}
 
-<form hx-post="{% url 'post:post_create' post.id %}"
+<form hx-post="{% url 'post:post_create' %}{% if group_id %}?group_id={{ group_id }}{% endif %}"
       hx-target="#post-list"
       hx-encoding="multipart/form-data"
       class="bg-white rounded-5 p-3 mb-4">
     {% csrf_token %}
+
+    {% if group_id %}
+        <input type="hidden" name="group_id" value="{{ group_id }}">
+    {% endif %}
 
     <div class="d-flex align-items-start gap-2">
         <img src="{% static 'assets/Group 8.png' %}" class="rounded-circle" width="40" height="40" alt="">

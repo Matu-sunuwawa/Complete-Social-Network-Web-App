@@ -6,29 +6,46 @@ from django.views.generic import (
 )
 from django.http import HttpResponse
 from .models import Post, Comment
-import time
+import time, json
 
 
 class PostCreateView(CreateView):
-  model = Post
-  fields = ['content', 'image']
+    model = Post
+    fields = ['content', 'image']
 
-  def get_template_names(self):
-    if self.request.headers.get('HX-Request'):
-      return ['post/partials/post_create.html']
+    def get_template_names(self):
+        if self.request.headers.get('HX-Request'):
+            return ['post/partials/post_create.html']
+        return ['post/post_form.html']
 
-  def form_valid(self, form):
-    form.instance.user = self.request.user
-    self.object = form.save()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        tab = self.request.GET.get('tab', '')
+        context['group_id'] = self.request.GET.get('group_id')
+        context['current_tab'] = tab
+        return context
 
-    if self.request.headers.get('HX-Request'):
-        posts = Post.objects.all()
-        return render(self.request, 'core/partials/home.html', {'posts': posts})
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        group_id = self.request.GET.get('group_id')
+        if group_id:
+            form.instance.group_id = group_id
+        self.object = form.save()
 
-    return super().form_valid(form)
+        if self.request.headers.get('HX-Request'):
+            response = HttpResponse()
+            if self.object.group:
+                success_url = f"{reverse('group:group_list')}?tab=group_detail&group_id={self.object.group.id}"
+            else:
+                success_url = reverse('core:home')
+            response['HX-Location'] = json.dumps({
+                'path': success_url,
+                'target': '#main-content-area'
+            })
+            response['HX-Trigger'] = 'closeModal'
+            return response
 
-  def get_success_url(self):
-    return reverse_lazy('core:home')
+        return super().form_valid(form)
 
 class PostDetailView(DetailView):
   context_object_name = 'post'

@@ -20,3 +20,9 @@
    - on first click of the group left menu: show feed(the posts from the group that user joined)  [DONE]
    - make the your group and discover clickable.  [DONE]
    - pagination on list of feed group posts  [DONE]
+8. fix back navigation  [DONE]
+9. fix Update function redirection
+10. fix the post back navigation to previous state
+11. fix new creation group redirection  [DONE]
+12. fix delete group redirection  [DONE]
+13. sometimes the profile in left menu goes disapeared.
