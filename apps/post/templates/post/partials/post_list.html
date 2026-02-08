@@ -31,11 +31,10 @@
             {% if post.user == request.user %}
               <li>
                 <a class="dropdown-item d-flex align-items-center gap-2 py-2"
-                    href="{% url 'post:post_update' post.id %}?next={{ request.path }}"
-                    hx-get="{% url 'post:post_update' post.id %}?next={{ request.path }}"
-                    hx-target="#main-content-area"
-                    hx-push-url="true"
-                >
+                  href="{% url 'post:post_update' post.id %}?next={{ request.get_full_path|urlencode }}"
+                  hx-get="{% url 'post:post_update' post.id %}?next={{ request.get_full_path|urlencode }}"
+                  hx-target="#main-content-area"
+                  hx-push-url="true">
                   <small>Edit Post</small>
                 </a>
               </li>
@@ -55,14 +54,12 @@
       </div>
     </div>
 
-    <div
-      role="button"
-      hx-get="{% url 'post:post_detail' post.id %}?next={{ request.path }}"
-      hx-target="#main-content-area"
-      hx-push-url="true"
-      class="cursor-pointer"
-    >
-      {{post.content}}
+    <div role="button"
+        hx-get="{% url 'post:post_detail' post.id %}?next={{ request.get_full_path|urlencode }}"
+        hx-target="#main-content-area"
+        hx-push-url="true"
+        class="cursor-pointer">
+        {{ post.content }}
     </div>
 
     <div class="post-gallery">
@@ -85,14 +82,12 @@
           {% include 'post/partials/like_button.html' with post=post %}
         </div>
       </div>
-      <div
-        class="px-2 d-flex align-items-center gap-1 cursor-pointer"
-        hx-get="{% url 'post:post_detail' post.id %}?next={{ request.path }}"
-        hx-target="#main-content-area"
-        hx-push-url="true"
-      >
-        <img src="{% static 'assets/rocketchat-24-outlined.svg' %}" alt="">
-        Comment
+      <div class="px-2 d-flex align-items-center gap-1 cursor-pointer"
+          hx-get="{% url 'post:post_detail' post.id %}?next={{ request.get_full_path|urlencode }}"
+          hx-target="#main-content-area"
+          hx-push-url="true">
+          <img src="{% static 'assets/rocketchat-24-outlined.svg' %}" alt="">
+          Comment
       </div>
     </div>
 

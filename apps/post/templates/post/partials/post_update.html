@@ -1,18 +1,16 @@
 {% load static %}
 
 <div class="d-flex align-items-center mb-3">
-  <a
-    href="{{ back_url }}"
-    class="btn btn-link text-decoration-none text-primary p-0"
-    hx-get="{{ back_url }}"
-    hx-target="#main-content-area"
-    hx-push-url="true"
-  >
+  <a href="{{ back_url }}"
+     class="btn btn-link text-decoration-none text-primary p-0"
+     hx-get="{{ back_url }}"
+     hx-target="#main-content-area"
+     hx-push-url="true">
     ← Back
   </a>
 </div>
 
-<form hx-post="{% url 'post:post_update' post.id %}?next={{ back_url }}"
+<form hx-post="{% url 'post:post_update' post.id %}?next={{ back_url|urlencode }}"
       hx-target="#main-content-area"
       hx-encoding="multipart/form-data"
       class="bg-white rounded-5 p-3 mb-4">

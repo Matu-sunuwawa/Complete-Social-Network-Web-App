@@ -64,30 +64,31 @@ class PostDetailView(DetailView):
     return [self.template_name]
 
 class PostUpdateView(UpdateView):
-  model = Post
-  fields = ['content', 'image']
-  template_name = 'post/post_update.html'
+    model = Post
+    fields = ['content', 'image']
+    template_name = 'post/post_update.html'
 
-  def get_context_data(self, **kwargs):
-    context = super().get_context_data(**kwargs)
-    context['back_url'] = self.request.GET.get('next', reverse('core:home'))
-    return context
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['back_url'] = self.request.GET.get('next', reverse('core:home'))
+        return context
 
-  def get_template_names(self):
-    if self.request.headers.get('HX-Request'):
-      return ['post/partials/post_update.html']
-    return [self.template_name]
+    def get_template_names(self):
+        if self.request.headers.get('HX-Request'):
+            return ['post/partials/post_update.html']
+        return [self.template_name]
 
-  def form_valid(self, form):
-    self.object = form.save()
-
-    if self.request.headers.get('HX-Request'):
-        next_url = self.request.GET.get('next', reverse('core:home'))
-        response = HttpResponse()
-        response['HX-Location'] = next_url
-        return response
-
-    return super().form_valid(form)
+    def form_valid(self, form):
+        self.object = form.save()
+        if self.request.headers.get('HX-Request'):
+            next_url = self.request.GET.get('next', reverse('core:home'))
+            response = HttpResponse()
+            response['HX-Location'] = json.dumps({
+                'path': next_url,
+                'target': '#main-content-area'
+            })
+            return response
+        return super().form_valid(form)
 
 class PostDeleteView(DeleteView):
   model = Post
