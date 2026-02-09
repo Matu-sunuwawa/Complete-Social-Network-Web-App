@@ -3,7 +3,7 @@
 2. watched posts [views]
 3. Notification
 4. Pagination loading  [not using `time`, use `best method`]
-5. HTMX page url is not updating  [FIXED]
+5. HTMX page url is not updating  [FIXED]  [DONE]
 
 # Quick fixes
 1. left side menus pages are not created yet  [DONE]
@@ -22,7 +22,7 @@
    - pagination on list of feed group posts  [DONE]
 8. fix back navigation  [DONE]
 9. fix Update function redirection  [DONE]
-10. fix the post back navigation to previous state
+10. fix the post back navigation to previous state  [DONE]
 11. fix new creation group redirection  [DONE]
 12. fix delete group redirection  [DONE]
-13. sometimes the profile in left menu goes disapeared.
+13. sometimes the profile in left menu goes disapeared.  [Just simply resfresh]

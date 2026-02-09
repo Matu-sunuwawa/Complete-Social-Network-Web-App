@@ -1,6 +1,6 @@
 {% load static %}
 
-{% if group_id %}
+{% if not group_id %}
     <div class="d-flex align-items-center mb-3">
     <button class="btn btn-link text-decoration-none text-primary p-0"
             hx-get="{% url 'group:group_list' %}?tab=group_detail&group_id={{ group_id }}"
@@ -24,10 +24,12 @@
     <div class="d-flex align-items-start gap-2">
         <img src="{% static 'assets/Group 8.png' %}" class="rounded-circle" width="40" height="40" alt="">
         <textarea name="content"
+                  id="row_value"
                   class="form-control border-0 shadow-none fs-5"
                   rows="1"
                   placeholder="Share something..."
                   style="resize: none;"
+                  onclick="document.getElementById('row_value').rows = 3"
                   required></textarea>
     </div>
 
