@@ -52,16 +52,24 @@ class PostDetailView(DetailView):
   model = Post
   template_name = 'post/post_detail.html'
 
-  def get_context_data(self, **kwargs):
-    context = super().get_context_data(**kwargs)
-    context['back_url'] = self.request.GET.get('next', reverse_lazy('core:home'))
-    return context
-
   def get_template_names(self):
     time.sleep(1)
     if self.request.headers.get('HX-Request'):
       return ['post/partials/post_detail.html']
     return [self.template_name]
+
+  def get(self, request, *args, **kwargs):
+    self.object = self.get_object()
+    if request.user.is_authenticated:
+        self.object.viewers.add(request.user)
+
+    context = self.get_context_data(object=self.object)
+    return self.render_to_response(context)
+
+  def get_context_data(self, **kwargs):
+    context = super().get_context_data(**kwargs)
+    context['back_url'] = self.request.GET.get('next', reverse_lazy('core:home'))
+    return context
 
 class PostUpdateView(UpdateView):
     model = Post

@@ -116,7 +116,7 @@ def follow_toggle(request, username):
   if request.headers.get('HX-Request'):
     post_url = reverse('user:follow_user', kwargs={'username':username})
     return HttpResponse(f"""
-        <button class="btn {btn_class} btn-sm"
+        <button class="btn {btn_class} btn-sm rounded-pill"
                 hx-post="{post_url}"
                 hx-target="this"
                 hx-swap="outerHTML">

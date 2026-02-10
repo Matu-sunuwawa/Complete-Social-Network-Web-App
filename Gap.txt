@@ -1,6 +1,6 @@
 # Gap in the project
 1. Adding more photo [Adding multiple images]
-2. watched posts [views]
+2. watched posts [views]  [DONE]
 3. Notification
 4. Pagination loading  [not using `time`, use `best method`]
 5. HTMX page url is not updating  [FIXED]  [DONE]

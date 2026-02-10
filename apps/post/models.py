@@ -15,6 +15,7 @@ class Post(models.Model):
   image = models.ImageField(
     upload_to="post_images/", blank=True, null=True
   )
+  viewers = models.ManyToManyField(User, related_name='viewed_posts', blank=True)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 

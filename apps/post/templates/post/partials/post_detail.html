@@ -14,10 +14,14 @@
 
 <div class="bg-white rounded-5 p-3 mt-4 shadow-sm post-card">
   <div class="d-flex align-items-center py-2">
-    <img src="{% static 'assets/Group 8.png' %}" alt="">
+    {% if post.user.profile.profile_pic %}
+      <img src="{{ post.user.profile.profile_pic.url }}" class="follower-avatar" alt="Profile">
+    {% else %}
+      <img src="{% static 'assets/default-avatar.png' %}" class="follower-avatar" alt="Profile">
+    {% endif %}
     <div class="ps-3">
       <h3 class="h5 mb-0">{{post.user.username}}</h3>
-      <p class="text-muted small mb-0">{{post.created_at}}</p>
+      <p class="text-muted small mb-0">{{post.created_at|timesince}} ago</p>
     </div>
   </div>
 
@@ -32,8 +36,10 @@
   </div>
 
   <div class="border-top d-flex mt-3 pt-2">
-    <div class="px-2 d-flex align-items-center gap-1 cursor-pointer">
-      6355 <img src="{% static 'assets/eye-24-outlined.svg' %}" alt="">
+    <div class="px-2 d-flex align-items-center gap-1 cursor-pointer text-muted small"
+        title="Unique views"
+    >
+      <img src="{% static 'assets/eye-24-outlined.svg' %}" alt="views"> {{ post.viewers.count }}
     </div>
     <div
       class="px-2 d-flex align-items-center gap-1 cursor-pointer"
@@ -54,7 +60,12 @@
       hx-on::after-request="if(event.detail.successful) { this.reset(); document.querySelector('.no-comments-msg')?.remove(); }"
     >
       {% csrf_token %}
-      <div class="d-flex align-items-center pt-3"> <img src="{% static 'assets/Group 8.png' %}" class="rounded-circle" width="35" height="35" alt="" />
+      <div class="d-flex align-items-center pt-3">
+        {% if request.user.profile.profile_pic %}
+            <img src="{{ request.user.profile.profile_pic.url }}" class="follower-avatar" alt="Profile">
+        {% else %}
+            <img src="{% static 'assets/default-avatar.png' %}" class="follower-avatar" alt="Profile">
+        {% endif %}
 
         <textarea name="content"
                   class="form-control-search ms-2"

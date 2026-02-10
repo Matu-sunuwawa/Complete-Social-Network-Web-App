@@ -4,12 +4,14 @@
   <div id="post-{{ post.id }}" class="bg-white rounded-5 p-3 mt-4 shadow-sm post-card">
     <div class="d-flex justify-content-between py-2">
       <div class="d-flex align-items-center">
-        {% if request.user.profile.profile_pic %}
-            <img src="{{ request.user.profile.profile_pic.url }}" class="follower-avatar" alt="Profile">
+        {% if post.user.profile.profile_pic %}
+            <img src="{{ post.user.profile.profile_pic.url }}" class="follower-avatar" alt="Profile">
+        {% else %}
+            <img src="{% static 'assets/default-avatar.png' %}" class="follower-avatar" alt="Profile">
         {% endif %}
         <div class="ps-3">
-          <h3 class="h5 mb-0">{{post.user.username}}</h3>
-          <p class="text-muted small mb-0">{{post.created_at}}</p>
+            <h3 class="h5 mb-0">{{post.user.username}}</h3>
+            <p class="text-muted small mb-0">{{post.created_at|timesince}} ago</p>
         </div>
       </div>
       <div>
@@ -69,8 +71,10 @@
     </div>
 
     <div class="border-top d-flex mt-3 pt-2">
-      <div class="px-2 d-flex align-items-center gap-1 cursor-pointer">
-        6355 <img src="{% static 'assets/eye-24-outlined.svg' %}" alt="">
+      <div class="px-2 d-flex align-items-center gap-1 cursor-pointer text-muted small"
+          title="Unique views"
+      >
+        <img src="{% static 'assets/eye-24-outlined.svg' %}" alt="views"> {{ post.viewers.count }}
       </div>
       <div
         class="px-2 d-flex align-items-center gap-1 cursor-pointer"
