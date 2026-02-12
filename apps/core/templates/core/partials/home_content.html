@@ -4,7 +4,12 @@
     hx-target="#post-list"
     hx-swap="afterbegin"
     hx-encoding="multipart/form-data"
-    hx-on::after-request="if(event.detail.successful) { this.reset(); document.getElementById('image-preview-container-home').innerHTML = ''; }"
+    hx-on::after-request="if(event.detail.successful) {
+        this.reset();
+        document.getElementById('image-preview-container-home').innerHTML = '';
+        selectedFiles = new DataTransfer(); // Reset the global file tracker
+        document.getElementById('image-upload-home').files = selectedFiles.files;
+    }"
     class="bg-white rounded-5 p-3 mb-4 shadow-sm">
 
     {% csrf_token %}
