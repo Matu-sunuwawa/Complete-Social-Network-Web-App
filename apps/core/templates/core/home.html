@@ -28,31 +28,4 @@
     {% include "core/includes/_right_sidebar.html" %}
 
 </div>
-<script>
-    function handleImagePreview(input, postId) {
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const preview = document.getElementById(`image-preview-${postId}`);
-                const container = document.getElementById(`image-container-${postId}`);
-                const clearCheckbox = document.getElementById(`image-clear-${postId}`);
-
-                if (preview) preview.src = e.target.result;
-                if (container) container.classList.remove('d-none');
-                if (clearCheckbox) clearCheckbox.checked = false;
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-
-    function handleImageRemove(postId) {
-        const container = document.getElementById(`image-container-${postId}`);
-        const uploadInput = document.getElementById(`image-upload-${postId}`);
-        const clearCheckbox = document.getElementById(`image-clear-${postId}`);
-
-        if (container) container.classList.add('d-none');
-        if (uploadInput) uploadInput.value = "";
-        if (clearCheckbox) clearCheckbox.checked = true;
-    }
-</script>
 {% endblock %}

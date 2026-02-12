@@ -2,11 +2,11 @@
 
 <form hx-post="{% url 'post:post_create' %}"
     hx-target="#post-list"
-    hx-swap="innerHTML"
+    hx-swap="afterbegin"
     hx-encoding="multipart/form-data"
-    hx-on::after-request="if(event.detail.successful) { this.reset(); document.getElementById('image-container-create').classList.add('d-none'); }"
-    class="bg-white rounded-5 p-3 mb-4 shadow-sm"
-    >
+    hx-on::after-request="if(event.detail.successful) { this.reset(); document.getElementById('image-preview-container-home').innerHTML = ''; }"
+    class="bg-white rounded-5 p-3 mb-4 shadow-sm">
+
     {% csrf_token %}
     <div class="d-flex align-items-center">
         {% if request.user.profile.profile_pic %}
@@ -14,10 +14,16 @@
         {% endif %}
         <textarea name="content" class="form-control-search" rows="1" placeholder="Share something..." required></textarea>
     </div>
+
+    <div id="image-preview-container-home" class="mt-2 d-flex flex-wrap gap-2"></div>
+
     <div class="border-top d-flex justify-content-between pt-3 mt-3">
-        <input type="file" name="image" accept="image/*" class="d-none" id="image-upload-create" onchange="handleImagePreview(this, 'create')">
-        <label for="image-upload-create" class="cursor-pointer">
-            <img src="{% static 'assets/image-24-outlined.svg' %}" alt="">
+        <input type="file" name="images" accept="image/*" class="d-none" id="image-upload-home"
+               multiple onchange="handleMultipleImagePreview(this, 'home')">
+
+        <label for="image-upload-home" class="cursor-pointer">
+            <img src="{% static 'assets/image-24-outlined.svg' %}" alt="Upload">
+            <span class="ms-1 small text-muted">Add Photos</span>
         </label>
         <button type="submit" class="btn btn-primary fw-medium px-4">Send</button>
     </div>

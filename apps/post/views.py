@@ -5,13 +5,13 @@ from django.views.generic import (
   UpdateView, DeleteView
 )
 from django.http import HttpResponse
-from .models import Post, Comment
+from .models import Post, PostImage, Comment
 import time, json
 
 
 class PostCreateView(CreateView):
     model = Post
-    fields = ['content', 'image']
+    fields = ['content']
 
     def get_template_names(self):
         if self.request.headers.get('HX-Request'):
@@ -31,6 +31,10 @@ class PostCreateView(CreateView):
         if group_id:
             form.instance.group_id = group_id
         self.object = form.save()
+
+        images = self.request.FILES.getlist('images')
+        for img in images:
+          PostImage.objects.create(post=self.object, image=img)
 
         if self.request.headers.get('HX-Request'):
             response = HttpResponse()

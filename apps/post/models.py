@@ -33,6 +33,13 @@ class Post(models.Model):
   def num_comments(self):
     return self.comments.count()
 
+class PostImage(models.Model):
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name="images")
+    image = models.ImageField(upload_to="post_images/")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __cl__(self):
+        return f"Image for {self.post.id}"
 
 class Like(models.Model):
   user = models.ForeignKey(

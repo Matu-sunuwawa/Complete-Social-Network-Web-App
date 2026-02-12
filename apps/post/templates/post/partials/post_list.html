@@ -64,9 +64,30 @@
         {{ post.content }}
     </div>
 
-    <div class="post-gallery">
-      {% if post.image %}
-        <img src="{{ post.image.url }}" alt="post img" />
+    <div class="post-gallery
+      {% if post.images.count == 1 %}one-image
+      {% elif post.images.count == 2 %}two-image
+      {% elif post.images.count == 3 %}three-image
+      {% endif %}">
+
+      {% for post_image in post.images.all %}
+          {% if forloop.counter <= 4 %}
+              <div class="gallery-item" onclick="openLightbox('{{ post_image.image.url }}')">
+                  <img src="{{ post_image.image.url }}" alt="post img" />
+
+                  {% if forloop.counter == 4 and post.images.count > 4 %}
+                      <div class="gallery-overlay">
+                          +{{ post.images.count|add:"-4" }}
+                      </div>
+                  {% endif %}
+              </div>
+          {% endif %}
+      {% endfor %}
+
+      {% if not post.images.all and post.image %}
+          <div class="gallery-item one-image" onclick="openLightbox('{{ post.image.url }}')">
+              <img src="{{ post.image.url }}" alt="post img" />
+          </div>
       {% endif %}
     </div>
 

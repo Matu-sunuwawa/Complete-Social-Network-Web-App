@@ -29,9 +29,21 @@
     {{post.content}}
   </p>
 
-  <div class="post-gallery">
-    {% if post.image %}
-      <img src="{{ post.image.url }}" alt="post img" />
+  <div class="post-gallery
+    {% if post.images.count == 1 %}one-image
+    {% elif post.images.count == 2 %}two-image
+    {% endif %}">
+
+    {% for post_image in post.images.all %}
+        <div class="gallery-item" onclick="openLightbox('{{ post_image.image.url }}')">
+            <img src="{{ post_image.image.url }}" alt="post img" />
+        </div>
+    {% endfor %}
+
+    {% if not post.images.all and post.image %}
+        <div class="gallery-item one-image" onclick="openLightbox('{{ post.image.url }}')">
+            <img src="{{ post.image.url }}" alt="post img" />
+        </div>
     {% endif %}
   </div>
 
