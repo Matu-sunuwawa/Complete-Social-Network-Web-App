@@ -77,7 +77,7 @@ class PostDetailView(DetailView):
 
 class PostUpdateView(UpdateView):
     model = Post
-    fields = ['content', 'image']
+    fields = ['content']
     template_name = 'post/post_update.html'
 
     def get_context_data(self, **kwargs):

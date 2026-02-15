@@ -14,7 +14,7 @@
 2. images for users are statics  [DONE]
 3. user follows other users  [DONE]
 4. Update profile not updating the left sidebar  [DONE]
-5. use user id `uuid` instead of use username on the url.
+5. use user id `uuid` instead of use username on the url.  [Not Accepted]
 6. update the url of page.  [DONE]
 7. create posts inside group.  [DONE]
    - on first click of the group left menu: show feed(the posts from the group that user joined)  [DONE]
