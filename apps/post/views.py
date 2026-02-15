@@ -103,23 +103,21 @@ class PostUpdateView(UpdateView):
         return super().form_valid(form)
 
 class PostDeleteView(DeleteView):
-  model = Post
+    model = Post
 
-  def get_template_names(self):
-    if self.request.headers.get('HX-Request'):
-      return ['post/partials/post_delete.html']
+    def get_template_names(self):
+        if self.request.headers.get('HX-Request'):
+            return ['post/partials/post_delete.html']
+        return ['post/post_confirm_delete.html']
 
-  def delete(self, request, *args, **kwargs):
-    self.object = self.get_object()
-    self.object.delete()
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
 
-    if self.request.headers.get('HX-Request'):
-        return HttpResponse("")
+        if self.request.headers.get('HX-Request'):
+            return HttpResponse("")
 
-    return super().delete(request, *args, **kwargs)
-
-  def get_success_url(self):
-    return reverse_lazy('core:home')
+        return super().delete(request, *args, **kwargs)
 
 
 class FeedListView(ListView):
