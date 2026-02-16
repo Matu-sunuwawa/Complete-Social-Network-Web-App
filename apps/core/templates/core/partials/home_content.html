@@ -34,20 +34,6 @@
     </div>
 </form>
 
-<div class="d-flex justify-content-between pt-3 mt-4">
-    <h3 class="h5 text-black">Feeds</h3>
-    <div class="d-flex text-color-category">
-        <h3 class="h5 fw-medium px-3">Recents</h3>
-        <h3 class="h5 fw-medium">Friends</h3>
-    </div>
-</div>
-
-<div id="post-list">
-    {% include 'post/partials/post_list.html' %}
-</div>
-
-<div class="d-flex justify-content-center my-4">
-    <div id="spinner" class="spinner-border htmx-indicator" role="status">
-        <span class="visually-hidden">Loading...</span>
-    </div>
+<div id="feed-container">
+    {% include 'core/partials/feed_with_tabs.html' %}
 </div>

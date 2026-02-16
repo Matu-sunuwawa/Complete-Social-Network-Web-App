@@ -105,3 +105,22 @@
         opacity: 0.7;
     }
 }
+
+.tab-link {
+    transition: all 0.2s ease-in-out;
+    font-weight: 500;
+    cursor: pointer;
+    display: inline-block;
+    border-bottom: 2px solid transparent;
+    padding-bottom: 5px;
+
+    &.active-tab {
+        color: $primary !important;
+        border-bottom-color: $primary;
+    }
+
+    &:hover {
+        color: shade-color($primary, 20%) !important;
+        opacity: 0.9;
+    }
+}

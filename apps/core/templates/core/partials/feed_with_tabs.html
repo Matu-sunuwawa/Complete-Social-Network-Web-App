@@ -1,0 +1,33 @@
+{% load static %}
+
+<div class="d-flex justify-content-between pt-3 mt-4 border-bottom pb-2">
+    <h3 class="h5 fw-bold text-black mb-0">Feeds</h3>
+
+    <div class="d-flex gap-3 align-items-center">
+        <a href="/?tab=recent"
+           hx-get="/?tab=recent"
+           hx-target="#feed-container"
+           hx-push-url="true"
+           class="text-decoration-none h6 mb-0 tab-link {% if current_tab == 'recent' or not current_tab %}active-tab{% else %}text-muted{% endif %}">
+            Recents
+        </a>
+
+        <a href="/?tab=friends"
+           hx-get="/?tab=friends"
+           hx-target="#feed-container"
+           hx-push-url="true"
+           class="text-decoration-none h6 mb-0 tab-link {% if current_tab == 'friends' %}active-tab{% else %}text-muted{% endif %}">
+            Friends
+        </a>
+    </div>
+</div>
+
+<div id="post-list" class="mt-2">
+    {% include 'post/partials/post_list.html' %}
+</div>
+
+<div class="d-flex justify-content-center my-4">
+    <div id="spinner" class="spinner-border htmx-indicator" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>

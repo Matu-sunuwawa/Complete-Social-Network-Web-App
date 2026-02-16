@@ -120,7 +120,7 @@
 
       <div class="text-center mt-4">
         <span
-          hx-get="{{ request.path }}?page={{ page_obj.next_page_number }}"
+          hx-get="{{ request.path }}?page={{ page_obj.next_page_number }}&tab={{ current_tab }}"
           hx-swap="beforeend"
           hx-target="#post-list"
           hx-select=".post-card"
