@@ -27,11 +27,23 @@
     <div id="lightbox-modal" class="modal fade" tabindex="-1" aria-hidden="true" style="background: rgba(0,0,0,0.9);">
         <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content border-0 bg-transparent">
-                <div class="text-end p-2">
+                <div class="text-end p-2 position-absolute top-0 end-0" style="z-index: 1060;">
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-0 text-center">
-                    <img id="lightbox-img-target" src="" class="img-fluid rounded shadow" style="max-height: 85vh; object-fit: contain;">
+
+                <div class="modal-body p-0 text-center position-relative">
+                    <button class="btn text-white position-absolute start-0 top-50 translate-middle-y fs-1"
+                            id="prev-btn" onclick="changeImage(-1)" style="z-index: 10;">
+                        <span>‹</span>
+                    </button>
+
+                    <img id="lightbox-img-target" src="" class="img-fluid rounded shadow"
+                        style="max-height: 85vh; object-fit: contain;">
+
+                    <button class="btn text-white position-absolute end-0 top-50 translate-middle-y fs-1"
+                            id="next-btn" onclick="changeImage(1)" style="z-index: 10;">
+                        <span>›</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -128,13 +140,52 @@
             }
         });
 
-        function openLightbox(imgSrc) {
+        let currentGallery = [];
+        let currentIndex = 0;
+
+        function openLightbox(index, imagesJson) {
+            currentGallery = imagesJson;
+            currentIndex = index;
+
+            updateLightboxContent();
+
             const modalElement = document.getElementById('lightbox-modal');
-            const imgElement = document.getElementById('lightbox-img-target');
-            imgElement.src = imgSrc;
             const modalInstance = new bootstrap.Modal(modalElement);
             modalInstance.show();
         }
+
+            function changeImage(step) {
+                currentIndex += step;
+
+                if (currentIndex >= currentGallery.length) currentIndex = 0;
+                if (currentIndex < 0) currentIndex = currentGallery.length - 1;
+
+                updateLightboxContent();
+            }
+
+            function updateLightboxContent() {
+                const imgElement = document.getElementById('lightbox-img-target');
+                imgElement.src = currentGallery[currentIndex];
+
+                const prevBtn = document.getElementById('prev-btn');
+                const nextBtn = document.getElementById('next-btn');
+
+                if (currentGallery.length <= 1) {
+                    prevBtn.style.display = 'none';
+                    nextBtn.style.display = 'none';
+                } else {
+                    prevBtn.style.display = 'block';
+                    nextBtn.style.display = 'block';
+                }
+            }
+
+            document.addEventListener('keydown', (e) => {
+                const modal = document.getElementById('lightbox-modal');
+                if (modal.classList.contains('show')) {
+                    if (e.key === "ArrowLeft") changeImage(-1);
+                    if (e.key === "ArrowRight") changeImage(1);
+                }
+            });
     </script>
 </body>
 </html>

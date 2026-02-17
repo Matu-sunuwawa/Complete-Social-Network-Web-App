@@ -72,7 +72,8 @@
 
       {% for post_image in post.images.all %}
           {% if forloop.counter <= 4 %}
-              <div class="gallery-item" onclick="openLightbox('{{ post_image.image.url }}')">
+              <div class="gallery-item"
+                  onclick="openLightbox({{ forloop.counter0 }}, [{% for img in post.images.all %}'{{ img.image.url }}'{% if not forloop.last %},{% endif %}{% endfor %}])">
                   <img src="{{ post_image.image.url }}" alt="post img" />
 
                   {% if forloop.counter == 4 and post.images.count > 4 %}
@@ -85,7 +86,7 @@
       {% endfor %}
 
       {% if not post.images.all and post.image %}
-          <div class="gallery-item one-image" onclick="openLightbox('{{ post.image.url }}')">
+          <div class="gallery-item one-image" onclick="openLightbox(0, ['{{ post.image.url }}'])">
               <img src="{{ post.image.url }}" alt="post img" />
           </div>
       {% endif %}
