@@ -1,8 +1,36 @@
 {% load static %}
 <div class="col-md-3 col-lg-3 d-none d-lg-block sticky-sidebar">
-  <div class="d-flex align-items-center bg-white rounded-5 p-3 shadow-sm">
-    <img class="cursor-pointer" src="{% static 'assets/search-24-outlined.svg' %}" alt="">
-    <input class="form-control-search" type="text" placeholder="Search...">
+  <div class="search-container bg-white rounded-5 p-2 shadow-sm d-flex align-items-center">
+    <div class="ps-2 cursor-pointer"
+         hx-get="{% url 'core:search' %}"
+         hx-target="#main-content-area"
+         hx-include="[name='q']"
+         hx-push-url="true">
+        <img src="{% static 'assets/search-24-outlined.svg' %}" alt="search" width="20">
+    </div>
+
+    <div class="position-relative flex-grow-1">
+        <input
+            id="search-input"
+            class="form-control-search ps-2 pe-4"
+            type="text"
+            name="q"
+            placeholder="Search..."
+            hx-get="{% url 'core:search' %}"
+            hx-target="#main-content-area"
+            hx-trigger="keyup changed delay:500ms, search"
+            hx-push-url="true"
+            value="{{ query|default:'' }}"
+            autocomplete="off"
+        >
+
+        <button id="clear-search"
+                type="button"
+                class="btn-close position-absolute end-0 top-50 translate-middle-y me-2"
+                style="font-size: 0.7rem; display: none;"
+                onclick="clearSearchInput()">
+        </button>
+    </div>
   </div>
 
   <div class="bg-white rounded-5 p-3 mt-3 shadow-sm">
@@ -52,3 +80,26 @@
     {% endfor %}
   </div>
 </div>
+
+<script>
+    function clearSearchInput() {
+        const input = document.getElementById('search-input');
+        const clearBtn = document.getElementById('clear-search');
+        input.value = '';
+        clearBtn.style.display = 'none';
+
+        input.dispatchEvent(new Event('search'));
+    }
+
+    document.getElementById('search-input').addEventListener('input', function(e) {
+        const clearBtn = document.getElementById('clear-search');
+        clearBtn.style.display = e.target.value.length > 0 ? 'block' : 'none';
+    });
+
+    window.addEventListener('load', () => {
+        const input = document.getElementById('search-input');
+        if(input && input.value.length > 0) {
+            document.getElementById('clear-search').style.display = 'block';
+        }
+    });
+</script>

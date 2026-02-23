@@ -62,3 +62,25 @@
         }
     }
 }
+
+.search-container {
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+
+    &:focus-within {
+        border-color: $primary;
+        background-color: #fff !important;
+    }
+
+    .form-control-search {
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent;
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .btn-close:focus {
+        box-shadow: none;
+    }
+}

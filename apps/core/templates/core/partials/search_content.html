@@ -1,0 +1,72 @@
+{% load static %}
+
+<div class="search-results-container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h4 fw-bold mb-0">Search results for "{{ query }}"</h2>
+    </div>
+
+    <div class="d-flex gap-3 mb-4 border-bottom pb-2">
+        <a href="?q={{ query }}&type=all" hx-get="?q={{ query }}&type=all" hx-target="#main-content-area"
+           class="text-decoration-none tab-link {% if search_type == 'all' %}active-tab{% endif %}">All</a>
+        <a href="?q={{ query }}&type=users" hx-get="?q={{ query }}&type=users" hx-target="#main-content-area"
+           class="text-decoration-none tab-link {% if search_type == 'users' %}active-tab{% endif %}">Users</a>
+        <a href="?q={{ query }}&type=groups" hx-get="?q={{ query }}&type=groups" hx-target="#main-content-area"
+           class="text-decoration-none tab-link {% if search_type == 'groups' %}active-tab{% endif %}">Groups</a>
+        <a href="?q={{ query }}&type=posts" hx-get="?q={{ query }}&type=posts" hx-target="#main-content-area"
+           class="text-decoration-none tab-link {% if search_type == 'posts' %}active-tab{% endif %}">Posts</a>
+    </div>
+
+    {% if users %}
+    <div class="mb-5">
+        <h3 class="h6 text-muted text-uppercase fw-bold mb-3">People</h3>
+        <div class="bg-white rounded-5 p-3 shadow-sm">
+            {% for user in users %}
+                <div class="d-flex align-items-center justify-content-between {% if not forloop.last %}border-bottom mb-3 pb-3{% endif %}">
+                    <a href="{% url 'user:profile_detail' user.username %}" hx-get="{% url 'user:profile_detail' user.username %}" hx-target="#main-content-area" class="d-flex align-items-center gap-3 text-decoration-none text-black">
+                        <img src="{% if user.profile.profile_pic %}{{ user.profile.profile_pic.url }}{% else %}{% static 'assets/Group 8.png' %}{% endif %}" class="rounded-circle" width="50" height="50" style="object-fit: cover;">
+                        <div>
+                            <p class="mb-0 fw-bold">{{ user.username }}</p>
+                            <p class="mb-0 small text-muted">{{ user.profile.bio|truncatechars:50 }}</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if groups %}
+    <div class="mb-5">
+        <h3 class="h6 text-muted text-uppercase fw-bold mb-3">Groups</h3>
+        <div class="row g-3">
+            {% for group in groups %}
+            <div class="col-md-6">
+                <div class="bg-white rounded-5 p-3 shadow-sm h-100">
+                    <h4 class="h6 fw-bold">{{ group.name }}</h4>
+                    <p class="small text-muted mb-3">{{ group.description|truncatechars:80 }}</p>
+                    <a href="{% url 'group:group_list' %}?tab=group_detail&group_id={{ group.id }}"
+                       hx-get="{% url 'group:group_list' %}?tab=group_detail&group_id={{ group.id }}"
+                       hx-target="#main-content-area" class="btn btn-light btn-sm rounded-pill w-100">View Group</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if posts %}
+    <div class="mb-5">
+        <h3 class="h6 text-muted text-uppercase fw-bold mb-3">Posts</h3>
+        <div id="post-list">
+            {% include 'post/partials/post_list.html' with posts=posts %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if not users and not groups and not posts %}
+        <div class="text-center py-5">
+            <img src="{% static 'assets/search-24-outlined.svg' %}" width="60" class="opacity-25 mb-3">
+            <p class="text-muted">No results found for "{{ query }}"</p>
+        </div>
+    {% endif %}
+</div>

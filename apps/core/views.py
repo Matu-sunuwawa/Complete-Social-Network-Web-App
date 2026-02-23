@@ -1,6 +1,9 @@
 from django.shortcuts import render
 from django.views.generic import TemplateView, FormView
 from django.core.paginator import Paginator
+from django.db.models import Q
+from django.contrib.auth.models import User
+from apps.group.models import Group
 from apps.post.models import Post
 import random
 import time
@@ -48,3 +51,41 @@ def custom_404(request, exception=None):
 def custom_500(request):
     """Custom 500 error handler."""
     return render(request, 'core/errors/500.html', status=500)
+
+
+class SearchView(TemplateView):
+    template_name = 'core/search.html'
+
+    def get_template_names(self):
+        if self.request.headers.get('HX-Request'):
+            return ['core/partials/search_content.html']
+        return [self.template_name]
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        query = self.request.GET.get('q', '')
+        search_type = self.request.GET.get('type', 'all')
+
+        context['query'] = query
+        context['search_type'] = search_type
+
+        if query:
+            if search_type in ['all', 'users']:
+                context['users'] = User.objects.filter(
+                    Q(username__icontains=query) |
+                    Q(first_name__icontains=query) |
+                    Q(last_name__icontains=query)
+                ).distinct()[:10]
+
+            if search_type in ['all', 'groups']:
+                context['groups'] = Group.objects.filter(
+                    Q(name__icontains=query) |
+                    Q(description__icontains=query)
+                ).distinct()[:10]
+
+            if search_type in ['all', 'posts']:
+                context['posts'] = Post.objects.filter(
+                    content__icontains=query
+                ).order_by('-created_at')[:15]
+
+        return context
