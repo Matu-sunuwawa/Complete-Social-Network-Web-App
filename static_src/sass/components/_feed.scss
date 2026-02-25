@@ -130,6 +130,29 @@
         min-height: 200px;
     }
 
+    .lightbox-close-btn {
+        position: absolute;
+        top: -40px;
+        right: 0;
+        z-index: 1070;
+        background-color: rgba(0, 0, 0, 0.5);
+        padding: 12px;
+        border-radius: 50%;
+        opacity: 0.8;
+        transition: all 0.2s ease;
+
+        &:hover {
+            opacity: 1;
+            background-color: rgba(0, 0, 0, 0.9);
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            top: 10px;
+            right: 10px;
+        }
+    }
+
     #prev-btn, #next-btn {
         background: rgba(0, 0, 0, 0.4);
         border: none;
@@ -147,6 +170,13 @@
         span {
             display: inline-block;
             margin-bottom: 4px;
+        }
+
+        @media (max-width: 768px) {
+            margin: 0 5px;
+            width: 40px;
+            height: 40px;
+            font-size: 1.5rem !important;
         }
     }
 }

@@ -1,0 +1,15 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Search Results - {{ query }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    {% include "core/includes/_left_sidebar.html" %}
+
+    <div class="col-md-9 col-lg-6" id="main-content-area">
+        {% include 'core/partials/search_content.html' %}
+    </div>
+
+    {% include "core/includes/_right_sidebar.html" %}
+</div>
+{% endblock %}
