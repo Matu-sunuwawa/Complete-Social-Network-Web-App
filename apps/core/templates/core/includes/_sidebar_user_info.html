@@ -1,7 +1,13 @@
 <div id="sidebar-user-info" hx-swap-oob="true">
   <div class="text-center">
     {% if request.user.profile.profile_pic %}
-      <img src="{{ request.user.profile.profile_pic.url }}" class="profile-avatar" alt="Profile">
+      <a href="{% url 'user:profile_detail' request.user.username %}"
+         hx-get="{% url 'user:profile_detail' request.user.username %}"
+         hx-target="#main-content-area"
+         hx-push-url="true"
+      >
+        <img src="{{ request.user.profile.profile_pic.url }}" class="profile-avatar" alt="Profile">
+      </a>
     {% endif %}
     <h3 class="h5 fw-bold mb-0">{{ request.user.username }}</h3>
     <p class="small">{{ request.user.profile.bio|default:"No bio yet."|truncatechars:30 }}</p>
