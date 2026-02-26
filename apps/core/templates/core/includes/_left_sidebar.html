@@ -27,6 +27,21 @@
         <img class="menu-icon" src="{% static 'assets/user-circle-24-outlined.svg' %}" alt="">
         <div class="fw-medium m-0 d-none d-lg-block">Profile</div>
       </a>
+      <a href="{% url 'notifications:list' %}"
+        hx-get="{% url 'notifications:list' %}"
+        hx-target="#main-content-area"
+        hx-push-url="true"
+        class="d-flex align-items-center mb-3 menu-item-link text-decoration-none text-black position-relative"
+      >
+        <img class="menu-icon" src="{% static 'assets/bell-24-outlined.svg' %}" alt="">
+        <div class="fw-medium m-0 d-none d-lg-block">Notifications</div>
+
+        <div hx-get="{% url 'notifications:unread_count' %}"
+            hx-trigger="load, every 60s"
+            hx-target="this"
+            hx-swap="innerHTML">
+            </div>
+      </a>
       <a href="{% url 'post:feed_list' %}"
         hx-get="{% url 'post:feed_list' %}"
         hx-target="#main-content-area"

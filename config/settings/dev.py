@@ -20,6 +20,7 @@ CACHES = {
 }
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'notifications@yourdomain.com'
 
 if DEBUG:
     INSTALLED_APPS += [

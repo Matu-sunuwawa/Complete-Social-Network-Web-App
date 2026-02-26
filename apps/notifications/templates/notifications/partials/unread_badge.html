@@ -1,0 +1,9 @@
+{% if unread_count > 0 %}
+  <span class="position-absolute top-0 start-0 translate-middle badge rounded-pill bg-danger"
+        style="font-size: 0.6rem;"
+        id="notification-badge">
+    {{ unread_count }}
+  </span>
+{% else %}
+  <span id="notification-badge"></span>
+{% endif %}

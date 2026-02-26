@@ -14,6 +14,7 @@ urlpatterns = [
     path('posts/', include('apps.post.urls', namespace='post')),
     path('groups/', include('apps.group.urls', namespace='group')),
     path('user/', include('apps.user.urls', namespace='user')),
+    path('notifications/', include('apps.notifications.urls', namespace="notifications")),
 ]
 
 if settings.DEBUG:
