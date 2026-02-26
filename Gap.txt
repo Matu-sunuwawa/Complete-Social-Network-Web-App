@@ -5,6 +5,8 @@
 4. Pagination loading  [not using `time`, use `best method`]
 5. HTMX page url is not updating  [FIXED]  [DONE]
 6. search functionality  [DONE]
+7. every user should see who likes the posts.
+8. the remove(x) icon in full screen image should be on top-right section of every image.
 
 # Quick fixes
 1. left side menus pages are not created yet  [DONE]
