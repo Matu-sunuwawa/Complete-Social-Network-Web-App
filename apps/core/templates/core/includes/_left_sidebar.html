@@ -33,7 +33,7 @@
         hx-push-url="true"
         class="d-flex align-items-center mb-3 menu-item-link text-decoration-none text-black"
       >
-        <div class="position-relative d-flex align-items-center">
+        <div class="position-relative d-flex align-items-center ps-1">
             <img class="menu-icon" src="{% static 'assets/bell-24-outlined.svg' %}" alt="">
 
             <span hx-get="{% url 'notifications:unread_count' %}"
@@ -41,7 +41,7 @@
                   hx-target="this"
                   hx-swap="innerHTML"
                   hx-push-url="false">
-                  </span>
+            </span>
         </div>
 
         <div class="fw-medium m-0 d-none d-lg-block">Notifications</div>
