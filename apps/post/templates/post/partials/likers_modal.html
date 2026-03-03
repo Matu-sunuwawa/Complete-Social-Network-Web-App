@@ -7,7 +7,13 @@
     {% for user_liker in likers %}
         <div class="d-flex align-items-center justify-content-between mb-3">
             <div class="d-flex align-items-center">
-                <a href="{% url 'user:profile_detail' user_liker.username %}" class="text-decoration-none d-flex align-items-center">
+                <a href="{% url 'user:profile_detail' user_liker.username %}"
+                   hx-get="{% url 'user:profile_detail' user_liker.username %}"
+                   hx-target="#main-content-area"
+                   hx-push-url="true"
+                   data-bs-dismiss="modal"
+                   class="text-decoration-none d-flex align-items-center">
+
                     {% if user_liker.profile.profile_pic %}
                         <img src="{{ user_liker.profile.profile_pic.url }}" class="follower-avatar me-3" alt="">
                     {% else %}
@@ -21,17 +27,17 @@
             </div>
 
             {% if user_liker != request.user %}
-                <div id="follow-btn-{{ user_liker.id }}">
-                    <button class="btn btn-outline-primary btn-sm rounded-pill"
+                <div id="modal-follow-{{ user_liker.id }}">
+                    <button class="btn {% if user_liker.id in following_ids %}btn-primary{% else %}btn-outline-primary{% endif %} btn-sm rounded-pill"
                             hx-post="{% url 'user:follow_user' user_liker.username %}"
-                            hx-target="#follow-btn-{{ user_liker.id }}"
+                            hx-target="#modal-follow-{{ user_liker.id }}"
                             hx-swap="innerHTML">
-                        {% if user_liker in request.user.following.all %} Unfollow {% else %} Follow {% endif %}
+                        {% if user_liker.id in following_ids %} Unfollow {% else %} Follow {% endif %}
                     </button>
                 </div>
             {% endif %}
         </div>
     {% empty %}
-        <p class="text-center text-muted">No likes yet.</p>
+        <p class="text-center text-muted py-3">No likes yet.</p>
     {% endfor %}
 </div>

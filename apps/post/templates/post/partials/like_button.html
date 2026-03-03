@@ -1,16 +1,26 @@
-
 {% load static post_tags %}
 
-{% if user.is_authenticated and post|post_has_likes:user %}
-  <img
-    src="{% static 'assets/thumbs-up-24-outlined.svg' %}"
-    alt="Liked"
-    class="liked-icon"
-  />
-{% else %}
-  <img
-    src="{% static 'assets/thumbs-up-24-outlined.svg' %}"
-    alt="Like"
-  />
-{% endif %}
-<span>{{ post.likes.count }}</span>
+<div class="d-flex align-items-center gap-1">
+    <div class="cursor-pointer d-flex align-items-center"
+         hx-post="{% url 'post:like_post' post.id %}"
+         hx-target="#like-section-{{post.id}}"
+         hx-swap="innerHTML">
+
+        {% if user.is_authenticated and post|post_has_likes:user %}
+            <img src="{% static 'assets/thumbs-up-24-outlined.svg' %}"
+                 alt="Liked"
+                 class="liked-icon"
+                 style="filter: invert(41%) sepia(94%) saturate(3755%) hue-rotate(204deg) brightness(101%) contrast(101%);">
+        {% else %}
+            <img src="{% static 'assets/thumbs-up-24-outlined.svg' %}" alt="Like">
+        {% endif %}
+    </div>
+
+    {% if post.likes.count > 0 %}
+        <span class="small text-muted cursor-pointer hover-underline ms-1"
+              hx-get="{% url 'post:post_likers' post.id %}"
+              hx-target="#modal-content-target">
+            {{ post.likes.count }}
+        </span>
+    {% endif %}
+</div>

@@ -4,7 +4,7 @@ from django.views.generic import (
   ListView, DetailView, CreateView,
   UpdateView, DeleteView
 )
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from .models import Post, PostImage, Comment
 import time, json
 
@@ -140,16 +140,18 @@ class FeedListView(ListView):
 
 
 def like_post(request, pk):
-  post = get_object_or_404(Post, pk=pk)
-  like, created = post.likes.get_or_create(user=request.user, post=post)
-  if not created:
-    like.delete()
+    post = get_object_or_404(Post, pk=pk)
+    like, created = post.likes.get_or_create(user=request.user, post=post)
+    if not created:
+        like.delete()
 
-  if request.headers.get('HX-Request'):
-    return render(request, 'post/partials/like_button.html', {
-      'post': post,
-      'user': request.user
-    })
+    if request.headers.get('HX-Request'):
+        return render(request, 'post/partials/like_button.html', {
+            'post': post,
+            'user': request.user
+        })
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 def comment_create(request,pk):
   post = get_object_or_404(Post, pk=pk)
@@ -168,7 +170,12 @@ def post_likers_list(request, pk):
     post = get_object_or_404(Post, pk=pk)
     likers = [like.user for like in post.likes.all().select_related('user__profile')]
 
+    following_ids = []
+    if request.user.is_authenticated:
+        following_ids = list(request.user.following.values_list('following_id', flat=True))
+
     return render(request, 'post/partials/likers_modal.html', {
         'likers': likers,
-        'post': post
+        'post': post,
+        'following_ids': following_ids
     })
