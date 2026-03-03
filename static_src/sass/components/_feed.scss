@@ -186,3 +186,20 @@
         }
     }
 }
+
+.hover-underline {
+    &:hover {
+        text-decoration: underline !important;
+        color: $primary !important;
+    }
+}
+
+.modal-content {
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+    &::-webkit-scrollbar-thumb {
+        background: #ddd;
+        border-radius: 10px;
+    }
+}

@@ -1,0 +1,37 @@
+{% load static %}
+<div class="modal-header border-0 pb-0">
+    <h5 class="modal-title fw-bold">Likes</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body pt-2" style="max-height: 400px; overflow-y: auto;">
+    {% for user_liker in likers %}
+        <div class="d-flex align-items-center justify-content-between mb-3">
+            <div class="d-flex align-items-center">
+                <a href="{% url 'user:profile_detail' user_liker.username %}" class="text-decoration-none d-flex align-items-center">
+                    {% if user_liker.profile.profile_pic %}
+                        <img src="{{ user_liker.profile.profile_pic.url }}" class="follower-avatar me-3" alt="">
+                    {% else %}
+                        <img src="{% static 'assets/default-avatar.png' %}" class="follower-avatar me-3" alt="">
+                    {% endif %}
+                    <div>
+                        <span class="fw-bold d-block text-black">{{ user_liker.username }}</span>
+                        <small class="text-muted">{{ user_liker.profile.bio|truncatechars:40 }}</small>
+                    </div>
+                </a>
+            </div>
+
+            {% if user_liker != request.user %}
+                <div id="follow-btn-{{ user_liker.id }}">
+                    <button class="btn btn-outline-primary btn-sm rounded-pill"
+                            hx-post="{% url 'user:follow_user' user_liker.username %}"
+                            hx-target="#follow-btn-{{ user_liker.id }}"
+                            hx-swap="innerHTML">
+                        {% if user_liker in request.user.following.all %} Unfollow {% else %} Follow {% endif %}
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p class="text-center text-muted">No likes yet.</p>
+    {% endfor %}
+</div>

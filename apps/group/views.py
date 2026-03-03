@@ -6,7 +6,6 @@ from django.views.generic import (
 from django.urls import reverse_lazy, reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator
-from django.contrib.auth.models import User
 
 from django.db.models import Q
 from apps.group.models import Group, Membership

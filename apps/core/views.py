@@ -5,7 +5,6 @@ from django.db.models import Q
 from django.contrib.auth.models import User
 from apps.group.models import Group
 from apps.post.models import Post
-import random
 import time
 
 

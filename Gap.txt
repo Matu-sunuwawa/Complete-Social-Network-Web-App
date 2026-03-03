@@ -1,12 +1,12 @@
 # Gap in the project
 1. Adding more photo [Adding multiple images]  [DONE]
 2. watched posts [views]  [DONE]
-3. Notification
+3. Notification  [DONE]
 4. Pagination loading  [not using `time`, use `best method`]
 5. HTMX page url is not updating  [FIXED]  [DONE]
 6. search functionality  [DONE]
 7. every user should see who likes the posts.
-8. the remove(x) icon in full screen image should be on top-right section of every image.
+8. the remove(x) icon in full screen image should be on top-right section of every image.  [DONE]
 
 # Quick fixes
 1. left side menus pages are not created yet  [DONE]

@@ -53,15 +53,23 @@
     >
       <img src="{% static 'assets/eye-24-outlined.svg' %}" alt="views"> {{ post.viewers.count }}
     </div>
-    <div
-      class="px-2 d-flex align-items-center gap-1 cursor-pointer"
-      hx-post="{% url 'post:like_post' post.id %}"
-      hx-target="#like-section-{{post.id}}"
-      hx-swap="innerHTML"
-    >
-      <div id="like-section-{{post.id}}">
-        {% include 'post/partials/like_button.html' with post=post %}
-      </div>
+    <div class="px-2 d-flex align-items-center gap-1">
+        <div class="cursor-pointer"
+            hx-post="{% url 'post:like_post' post.id %}"
+            hx-target="#like-section-{{post.id}}"
+            hx-swap="innerHTML">
+            <div id="like-section-{{post.id}}">
+              {% include 'post/partials/like_button.html' with post=post %}
+            </div>
+        </div>
+
+        {% if post.likes.count > 0 %}
+        <span class="small text-muted cursor-pointer hover-underline"
+              hx-get="{% url 'post:post_likers' post.id %}"
+              hx-target="#modal-content-target">
+            {{ post.likes.count }}
+        </span>
+        {% endif %}
     </div>
   </div>
 

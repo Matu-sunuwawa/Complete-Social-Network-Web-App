@@ -10,6 +10,7 @@ urlpatterns = [
   path('<int:pk>/update/', PostUpdateView.as_view(), name="post_update"),
   path('<int:pk>/delete/', PostDeleteView.as_view(), name="post_delete"),
 
+  path('<int:pk>/likers/', post_likers_list, name='post_likers'),
   path('<int:pk>/like/', like_post, name="like_post"),
   path('<int:pk>/comment/', comment_create, name="comment_create")
 ]

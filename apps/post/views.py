@@ -163,3 +163,12 @@ def comment_create(request,pk):
     )
     if request.headers.get('HX-Request'):
       return render(request, 'post/partials/comment.html', {"comment":comment})
+
+def post_likers_list(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    likers = [like.user for like in post.likes.all().select_related('user__profile')]
+
+    return render(request, 'post/partials/likers_modal.html', {
+        'likers': likers,
+        'post': post
+    })
