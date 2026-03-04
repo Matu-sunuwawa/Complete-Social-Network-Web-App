@@ -6,7 +6,7 @@ from django.views.generic import (
 )
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Post, PostImage, Comment
-import time, json
+import json
 
 
 class PostCreateView(CreateView):
@@ -57,7 +57,6 @@ class PostDetailView(DetailView):
   template_name = 'post/post_detail.html'
 
   def get_template_names(self):
-    time.sleep(1)
     if self.request.headers.get('HX-Request'):
       return ['post/partials/post_detail.html']
     return [self.template_name]
@@ -127,7 +126,6 @@ class FeedListView(ListView):
   paginate_by = 4
 
   def get_queryset(self):
-    time.sleep(2)
     return Post.objects.filter(likes__user=self.request.user).order_by('-likes__created_at')
 
   def get_template_names(self):

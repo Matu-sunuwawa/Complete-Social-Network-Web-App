@@ -9,7 +9,6 @@ from django.contrib.auth.models import User
 from django.urls import reverse_lazy, reverse
 from .models import UserProfile, Follow
 from apps.post.models import Post
-import time
 
 
 class ProfileDetailView(DetailView):
@@ -28,7 +27,6 @@ class ProfileDetailView(DetailView):
       return [self.template_name]
 
   def get_context_data(self, **kwargs):
-      time.sleep(1)
       context = super().get_context_data(**kwargs)
       profile_user = self.get_object()
       posts = Post.objects.filter(user=profile_user).order_by('-created_at')

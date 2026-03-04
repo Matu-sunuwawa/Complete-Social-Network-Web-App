@@ -1,18 +1,16 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, FormView
+from django.views.generic import TemplateView
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.contrib.auth.models import User
 from apps.group.models import Group
 from apps.post.models import Post
-import time
 
 
 class HomeView(TemplateView):
     template_name = 'core/home.html'
 
     def get_template_names(self):
-        time.sleep(2)
         trigger_target = self.request.headers.get('HX-Target')
         if self.request.headers.get('HX-Request'):
             if trigger_target == "feed-container":
@@ -27,10 +25,11 @@ class HomeView(TemplateView):
         context = super().get_context_data(**kwargs)
         tab = self.request.GET.get('tab', 'recent')
         posts = Post.objects.all()
-        if tab == 'friends':
+        if tab == 'friends' and self.request.user.is_authenticated:
             following_ids = self.request.user.following.values_list('following_id', flat=True)
             posts = posts.filter(user_id__in=following_ids)
-        posts = posts.order_by('-created_at')
+
+        posts = posts.order_by('-created_at').select_related('user', 'user__profile')
         paginator = Paginator(posts, 3)
         page_num = self.request.GET.get('page', 1)
         page_obj = paginator.get_page(page_num)
@@ -39,9 +38,6 @@ class HomeView(TemplateView):
         context['page_obj'] = page_obj
         context['current_tab'] = tab
         return context
-
-class AboutView(TemplateView):
-    pass
 
 def custom_404(request, exception=None):
     """Custom 404 error handler."""

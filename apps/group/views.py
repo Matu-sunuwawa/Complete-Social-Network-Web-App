@@ -10,7 +10,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from apps.group.models import Group, Membership
 from apps.post.models import Post
-import time, json
+import json
 
 
 class GroupListView(ListView):
@@ -27,7 +27,6 @@ class GroupListView(ListView):
         return Group.objects.filter(Q(created_by=user) | Q(memberships__user=user)).distinct()
 
     def get_context_data(self, **kwargs):
-        time.sleep(1)
         context = super().get_context_data(**kwargs)
         tab = self.request.GET.get('tab', '')
         group_id = self.request.GET.get('group_id')
