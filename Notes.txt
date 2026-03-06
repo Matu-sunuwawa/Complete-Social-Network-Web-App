@@ -145,6 +145,13 @@ CMDS  [Docker]:
 - docker compose exec web uv run python manage.py startapp upload
 - docker compose -f docker-compose.prod.yml exec web python manage.py startapp upload
 - docker compose exec web uv run python manage.py createsuperuser
+# Backup data on postgresql
+- docker compose exec db pg_dump -U postgres social_dev > backup.sql
+# Drop and recreate database
+- docker compose exec db psql -U postgres -c "DROP DATABASE social_dev;"
+- docker compose exec db psql -U postgres -c "CREATE DATABASE social_dev;"
+# Restore backup data on postgresql
+- docker compose exec -T db psql -U postgres -d social_dev < backup.sql
 ```
 Notes:-
 - "prune" deletes all <none> images not tagged or used by a container.
