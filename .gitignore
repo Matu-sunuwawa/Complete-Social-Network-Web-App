@@ -31,3 +31,8 @@ mediafiles/
 .env
 .env.dev
 .env.prod
+
+# Database backups
+*.sql
+*.dump
+backup.sql
