@@ -1,6 +1,7 @@
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from apps.group.models import Group
 
+User = get_user_model()
 
 def suggested_users(request):
   if request.user.is_authenticated:
