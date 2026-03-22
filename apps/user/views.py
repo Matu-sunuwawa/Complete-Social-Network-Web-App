@@ -1,17 +1,84 @@
-from django.shortcuts import render, get_object_or_404
+from django.contrib.auth import get_user_model
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.loader import render_to_string
 from django.views.generic import (
   DetailView, UpdateView, DeleteView
 )
 from django.core.paginator import Paginator
-from django.contrib.auth.models import User
 from django.urls import reverse_lazy, reverse
 from .models import UserProfile, Follow
 from apps.post.models import Post
 
+import json
+from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import login
+from google.oauth2 import id_token
+from google.auth.transport import requests
 
-class ProfileDetailView(DetailView):
+from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import CreateView
+from .forms import EmailUserCreationForm, EmailAuthenticationForm
+
+from config.settings.dev import GOOGLE_OAUTH_CLIENT_ID
+
+
+User = get_user_model()
+
+
+class SignUpView(CreateView):
+    form_class = EmailUserCreationForm
+    success_url = reverse_lazy('user:login')
+    template_name = 'user/signup.html'
+
+class UserLoginView(LoginView):
+    form_class = EmailAuthenticationForm
+    template_name = 'user/login.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['GOOGLE_OAUTH_CLIENT_ID'] = settings.GOOGLE_OAUTH_CLIENT_ID
+        return context
+
+class UserLogoutView(LogoutView):
+    next_page = 'core:home'
+
+@csrf_exempt
+def sign_in(request):
+    return render(request, 'user/login.html')
+
+@csrf_exempt
+def google_login_callback(request):
+    """
+    Google calls this URL after the user has signed in with their Google account.
+    """
+    print('Inside')
+    token = request.POST['credential']
+
+    try:
+        user_data = id_token.verify_oauth2_token(
+            token, requests.Request(), GOOGLE_OAUTH_CLIENT_ID
+        )
+        print("user data: ", user_data)
+        print("user name: ", user_data["name"])
+        print("user email: ", user_data["email"])
+    except ValueError:
+        return HttpResponse(status=403)
+
+    # In a real app, I'd also save any new user here to the database.
+    # You could also authenticate the user here using the details from Google (https://docs.djangoproject.com/en/4.2/topics/auth/default/#how-to-log-a-user-in)
+    request.session['user_data'] = user_data
+
+    return redirect('user:sign_in')
+
+def sign_out(request):
+    del request.session['user_data']
+    return redirect('user:sign_in')
+
+
+class ProfileDetailView(LoginRequiredMixin, DetailView):
   model = User
   template_name = 'user/profile.html'
   context_object_name = 'profile_user'
@@ -38,7 +105,7 @@ class ProfileDetailView(DetailView):
       context['page_obj'] = page_obj
       return context
 
-class ProfileUpdateView(UpdateView):
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
   model = UserProfile
   template_name = 'user/partials/edit_profile_info.html'
   fields = ['bio', 'profile_pic']

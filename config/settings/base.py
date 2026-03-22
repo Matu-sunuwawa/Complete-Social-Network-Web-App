@@ -83,3 +83,11 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'mediafiles'
 
 ALLOWED_HOSTS = []
+
+LOGIN_URL = 'user:sign_in'
+LOGIN_REDIRECT_URL = 'user:sign_in'
+LOGOUT_REDIRECT_URL = 'user:sign_in'
+
+
+SECURE_REFERRER_POLICY = 'no-referrer-when-downgrade'
+SECURE_CROSS_ORIGIN_OPENER_POLICY = "same-origin-allow-popups"
