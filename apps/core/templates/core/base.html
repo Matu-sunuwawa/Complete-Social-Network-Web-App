@@ -12,7 +12,7 @@
 </head>
 <body>
 
-    <main id="main-content-area" class="container container-top">
+    <main id="main-content-area" class="{% if request.resolver_match.url_name == 'sign_in' %}login-layout{% else %}container container-top{% endif %}">
         {% block content %}
         {% endblock %}
     </main>

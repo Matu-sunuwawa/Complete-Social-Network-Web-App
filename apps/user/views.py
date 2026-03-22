@@ -10,10 +10,8 @@ from django.urls import reverse_lazy, reverse
 from .models import UserProfile, Follow
 from apps.post.models import Post
 
-import json
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import login
 from google.oauth2 import id_token
 from google.auth.transport import requests
 
@@ -47,36 +45,31 @@ class UserLogoutView(LogoutView):
 
 @csrf_exempt
 def sign_in(request):
-    return render(request, 'user/login.html')
+    context = {
+        'GOOGLE_OAUTH_CLIENT_ID': settings.GOOGLE_OAUTH_CLIENT_ID
+    }
+    return render(request, 'user/login.html', context)
 
 @csrf_exempt
 def google_login_callback(request):
     """
-    Google calls this URL after the user has signed in with their Google account.
+    Google calls this URL after the user has signed in.
     """
-    print('Inside')
-    token = request.POST['credential']
+    token = request.POST.get('credential')
 
     try:
         user_data = id_token.verify_oauth2_token(
-            token, requests.Request(), GOOGLE_OAUTH_CLIENT_ID
+            token, requests.Request(), settings.GOOGLE_OAUTH_CLIENT_ID
         )
-        print("user data: ", user_data)
-        print("user name: ", user_data["name"])
-        print("user email: ", user_data["email"])
     except ValueError:
         return HttpResponse(status=403)
 
-    # In a real app, I'd also save any new user here to the database.
-    # You could also authenticate the user here using the details from Google (https://docs.djangoproject.com/en/4.2/topics/auth/default/#how-to-log-a-user-in)
     request.session['user_data'] = user_data
-
     return redirect('user:sign_in')
 
 def sign_out(request):
     del request.session['user_data']
     return redirect('user:sign_in')
-
 
 class ProfileDetailView(LoginRequiredMixin, DetailView):
   model = User
