@@ -7,13 +7,15 @@ from django.urls import reverse_lazy, reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+
 from django.db.models import Q
 from apps.group.models import Group, Membership
 from apps.post.models import Post
 import json
 
 
-class GroupListView(ListView):
+class GroupListView(LoginRequiredMixin, ListView):
     model = Group
     template_name = 'group/group.html'
     context_object_name = 'groups'
@@ -66,7 +68,7 @@ class GroupListView(ListView):
             return ['group/partials/group_list.html']
         return [self.template_name]
 
-class GroupCreateView(CreateView):
+class GroupCreateView(LoginRequiredMixin, CreateView):
     model = Group
     fields = ['name', 'description']
     template_name = 'group/partials/group_form.html'
@@ -90,7 +92,7 @@ class GroupCreateView(CreateView):
             return response
         return HttpResponseRedirect(self.get_success_url())
 
-class GroupUpdateView(UpdateView):
+class GroupUpdateView(LoginRequiredMixin, UpdateView):
     model = Group
     fields = ['name', 'description']
     template_name = 'group/partials/group_form.html'
@@ -114,7 +116,7 @@ class GroupUpdateView(UpdateView):
             return response
         return super().form_valid(form)
 
-class GroupDeleteView(DeleteView):
+class GroupDeleteView(LoginRequiredMixin, DeleteView):
     model = Group
     template_name = 'group/partials/group_delete_confirm.html'
     success_url = reverse_lazy('group:group_list')

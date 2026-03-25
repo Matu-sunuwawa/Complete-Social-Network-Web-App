@@ -6,8 +6,8 @@ app_name = 'user'
 urlpatterns = [
     # Auth
     path('signup/', SignUpView.as_view(), name='signup'),
-    path('login/', sign_in, name='sign_in'),
-    path('logout/', sign_out, name='sign_out'),
+    path('login/', UserLoginView.as_view(), name='sign_in'),
+    path('logout/', UserLogoutView.as_view(), name='sign_out'),
     path('auth/google/callback/', google_login_callback, name='google_callback'),
 
     path('profile/<str:username>/', ProfileDetailView.as_view(), name="profile_detail"),

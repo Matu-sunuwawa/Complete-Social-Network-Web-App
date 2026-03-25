@@ -1,0 +1,65 @@
+<div class="modal-header border-0 pb-0">
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+<div class="modal-body pt-0 px-5 pb-5">
+    <div class="text-center mb-4">
+        <h2 class="fw-bold">Sign in to MatuSunu</h2>
+    </div>
+
+    <div class="mb-4 d-flex justify-content-center">
+        <div id="google_btn_container"></div>
+    </div>
+
+    <div class="d-flex align-items-center my-3 text-muted">
+        <hr class="flex-grow-1">
+        <span class="mx-2 small fw-bold">OR</span>
+        <hr class="flex-grow-1">
+    </div>
+
+    <form method="post" action="{% url 'user:sign_in' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <input type="email" name="username" class="form-control rounded-pill py-2"
+                   placeholder="Email address" required>
+        </div>
+        <div class="mb-4">
+            <input type="password" name="password" class="form-control rounded-pill py-2"
+                   placeholder="Password" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 rounded-pill fw-bold py-2">Sign in</button>
+
+        <button type="button" class="btn btn-outline-secondary border-0 w-100 rounded-pill fw-bold py-2 mt-2">
+            Forgot password?
+        </button>
+    </form>
+</div>
+
+<script>
+    (function() {
+        function renderGoogleButton() {
+            if (window.google && google.accounts && google.accounts.id) {
+                google.accounts.id.initialize({
+                    client_id: "{{ GOOGLE_OAUTH_CLIENT_ID }}",
+                    ux_mode: "popup",
+                    login_uri: "http://localhost:8000/user/auth/google/callback/"
+                });
+                google.accounts.id.renderButton(
+                    document.getElementById("google_btn_container"),
+                    {
+                        type: "standard",
+                        shape: "pill",
+                        theme: "outline",
+                        text: "signin_with",
+                        size: "large",
+                        width: "300"
+                    }
+                );
+            } else {
+                // If the script isn't ready yet, wait 100ms and try again
+                setTimeout(renderGoogleButton, 100);
+            }
+        }
+        renderGoogleButton();
+    })();
+</script>

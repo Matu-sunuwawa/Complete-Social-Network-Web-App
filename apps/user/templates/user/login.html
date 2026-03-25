@@ -4,12 +4,21 @@
 
 {% block content %}
 <div class="row vh-100 gx-0">
-    {% if request.session.user_data %}
+    {% if request.user.is_authenticated or request.session.user_data %}
         <div class="col-12 d-flex flex-column align-items-center justify-content-center text-center">
-            <img src="{{ request.session.user_data.picture }}" class="rounded-circle mb-3 shadow" width="100">
-            <h2 class="fw-bold">Hi, {{ request.session.user_data.given_name }}!</h2>
-            <p class="text-muted">You're already signed in with {{ request.session.user_data.email }}</p>
-            <a href="{% url 'user:sign_out' %}" class="btn btn-outline-danger rounded-pill px-4">Sign out</a>
+            {% if request.user.is_authenticated %}
+                <h2 class="fw-bold">Hi, {{ request.user.username }}!</h2>
+                <p class="text-muted">You're signed in with {{ request.user.email }}</p>
+            {% else %}
+                <img src="{{ request.session.user_data.picture }}" class="rounded-circle mb-3 shadow" width="100">
+                <h2 class="fw-bold">Hi, {{ request.session.user_data.given_name }}!</h2>
+            {% endif %}
+
+            <button hx-post="{% url 'user:sign_out' %}"
+                    hx-target="body"
+                    class="btn btn-outline-danger rounded-pill px-4">
+                Sign out
+            </button>
         </div>
     {% else %}
         <div class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center bg-white">
@@ -71,7 +80,11 @@
 
                     <div class="mt-5">
                         <p class="fw-bold mb-3">Already have an account?</p>
-                        <button class="btn btn-outline-primary w-100 rounded-pill fw-bold py-2">Sign in</button>
+                        <button class="btn btn-outline-primary w-100 rounded-pill fw-bold py-2"
+                                hx-get="{% url 'user:sign_in' %}"
+                                hx-target="#modal-content-target">
+                            Sign in
+                        </button>
                     </div>
                 </div>
             </div>

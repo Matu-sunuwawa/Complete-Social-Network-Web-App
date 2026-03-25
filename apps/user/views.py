@@ -1,4 +1,4 @@
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, login
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template.loader import render_to_string
@@ -35,41 +35,26 @@ class UserLoginView(LoginView):
     form_class = EmailAuthenticationForm
     template_name = 'user/login.html'
 
+    def get_template_names(self):
+        if self.request.headers.get('HX-Request'):
+            return ['user/partials/login_modal.html']
+        return [self.template_name]
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['GOOGLE_OAUTH_CLIENT_ID'] = settings.GOOGLE_OAUTH_CLIENT_ID
         return context
 
 class UserLogoutView(LogoutView):
-    next_page = 'core:home'
+    next_page = reverse_lazy('user:sign_in')
 
-@csrf_exempt
-def sign_in(request):
-    context = {
-        'GOOGLE_OAUTH_CLIENT_ID': settings.GOOGLE_OAUTH_CLIENT_ID
-    }
-    return render(request, 'user/login.html', context)
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
 
-@csrf_exempt
-def google_login_callback(request):
-    """
-    Google calls this URL after the user has signed in.
-    """
-    token = request.POST.get('credential')
+        if request.headers.get('HX-Request'):
+            response['HX-Redirect'] = response.url
 
-    try:
-        user_data = id_token.verify_oauth2_token(
-            token, requests.Request(), settings.GOOGLE_OAUTH_CLIENT_ID
-        )
-    except ValueError:
-        return HttpResponse(status=403)
-
-    request.session['user_data'] = user_data
-    return redirect('user:sign_in')
-
-def sign_out(request):
-    del request.session['user_data']
-    return redirect('user:sign_in')
+        return response
 
 class ProfileDetailView(LoginRequiredMixin, DetailView):
   model = User
@@ -232,3 +217,28 @@ def user_followers_list(request, username):
     if request.headers.get('HX-Request'):
         return render(request, 'user/partials/followers_tab.html', context)
     return HttpResponseRedirect(reverse('user:profile_detail', args=[username]))
+
+@csrf_exempt
+def google_login_callback(request):
+    token = request.POST.get('credential')
+    try:
+        user_data = id_token.verify_oauth2_token(
+            token, requests.Request(), settings.GOOGLE_OAUTH_CLIENT_ID
+        )
+        print("user data: ", user_data)
+        email = user_data['email']
+
+        user, created = User.objects.get_or_create(
+            email=email,
+            defaults={
+                'username': email.split('@')[0],
+                'first_name': user_data.get('given_name', ''),
+                'last_name': user_data.get('family_name', ''),
+            }
+        )
+
+        login(request, user)
+        return redirect('core:home')
+
+    except ValueError:
+        return HttpResponse(status=403)
