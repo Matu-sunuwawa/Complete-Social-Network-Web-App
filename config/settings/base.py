@@ -85,7 +85,7 @@ MEDIA_ROOT = BASE_DIR / 'mediafiles'
 ALLOWED_HOSTS = []
 
 LOGIN_URL = 'user:sign_in'
-LOGIN_REDIRECT_URL = 'user:sign_in'
+LOGIN_REDIRECT_URL = 'core:home'
 LOGOUT_REDIRECT_URL = 'user:sign_in'
 
 

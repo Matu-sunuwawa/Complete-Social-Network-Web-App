@@ -20,9 +20,6 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView
 from .forms import EmailUserCreationForm, EmailAuthenticationForm
 
-from config.settings.dev import GOOGLE_OAUTH_CLIENT_ID
-
-
 User = get_user_model()
 
 
@@ -34,6 +31,15 @@ class SignUpView(CreateView):
 class UserLoginView(LoginView):
     form_class = EmailAuthenticationForm
     template_name = 'user/login.html'
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+
+        if self.request.headers.get('HX-Request'):
+            return HttpResponse(status=204, headers={
+                'HX-Redirect': self.get_success_url()
+            })
+        return response
 
     def get_template_names(self):
         if self.request.headers.get('HX-Request'):
@@ -225,7 +231,6 @@ def google_login_callback(request):
         user_data = id_token.verify_oauth2_token(
             token, requests.Request(), settings.GOOGLE_OAUTH_CLIENT_ID
         )
-        print("user data: ", user_data)
         email = user_data['email']
 
         user, created = User.objects.get_or_create(
@@ -238,6 +243,12 @@ def google_login_callback(request):
         )
 
         login(request, user)
+
+        if request.headers.get('HX-Request'):
+            response = HttpResponse(status=204)
+            response['HX-Redirect'] = reverse('core:home')
+            return response
+
         return redirect('core:home')
 
     except ValueError:
