@@ -16,6 +16,13 @@
     <div class="d-flex align-items-center">
         {% if request.user.profile.profile_pic %}
             <img src="{{ request.user.profile.profile_pic.url }}" class="follower-avatar" alt="Profile">
+        {% else %}
+            <div class="bg-light rounded-circle p-1">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+            </div>
         {% endif %}
         <textarea name="content" class="form-control-search" rows="1" placeholder="Share something..." required></textarea>
     </div>
