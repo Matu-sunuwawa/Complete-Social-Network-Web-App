@@ -1,15 +1,24 @@
+{% load static %}
 <div id="sidebar-user-info" hx-swap-oob="true">
   <div class="text-center">
-    {% if request.user.profile.profile_pic %}
-      <a href="{% url 'user:profile_detail' request.user.username %}"
-         hx-get="{% url 'user:profile_detail' request.user.username %}"
-         hx-target="#main-content-area"
-         hx-push-url="true"
-      >
+    <a href="{% url 'user:profile_detail' request.user.username %}"
+       hx-get="{% url 'user:profile_detail' request.user.username %}"
+       hx-target="#main-content-area"
+       hx-push-url="true">
+
+      {% if request.user.profile.profile_pic %}
         <img src="{{ request.user.profile.profile_pic.url }}" class="profile-avatar" alt="Profile">
-      </a>
-    {% endif %}
-    <h3 class="h5 fw-bold mb-0">{{ request.user.username }}</h3>
-    <p class="small">{{ request.user.profile.bio|default:"No bio yet."|truncatechars:30 }}</p>
+      {% else %}
+        <div class="profile-avatar d-flex align-items-center justify-content-center bg-light rounded-circle mx-auto" style="width: 80px; height: 80px;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+        </div>
+      {% endif %}
+    </a>
+
+    <h3 class="h5 fw-bold mb-0 mt-2">{{ request.user.username }}</h3>
+    <p class="small text-muted">{{ request.user.profile.bio|default:"No bio yet."|truncatechars:30 }}</p>
   </div>
 </div>

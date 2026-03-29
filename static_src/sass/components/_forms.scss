@@ -84,3 +84,14 @@
         box-shadow: none;
     }
 }
+
+.btn-logout {
+    transition: all 0.2s;
+    color: #dc3545;
+    opacity: 0.8;
+}
+.btn-logout:hover {
+    opacity: 1;
+    background-color: #fff5f5;
+    border-radius: 12px;
+}

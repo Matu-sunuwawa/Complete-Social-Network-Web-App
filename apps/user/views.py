@@ -61,12 +61,15 @@ class UserLogoutView(LogoutView):
     next_page = reverse_lazy('user:sign_in')
 
     def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
+        from django.contrib.auth import logout
+        logout(request)
 
         if request.headers.get('HX-Request'):
-            response['HX-Redirect'] = response.url
+            response = HttpResponse(status=200)
+            response['HX-Redirect'] = str(self.next_page)
+            return response
 
-        return response
+        return super().post(request, *args, **kwargs)
 
 class ProfileDetailView(LoginRequiredMixin, DetailView):
   model = User
