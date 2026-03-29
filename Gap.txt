@@ -7,6 +7,13 @@
 6. search functionality  [DONE]
 7. every user should see who likes the posts.  [DONE]
 8. the remove(x) icon in full screen image should be on top-right section of every image.  [DONE]
+9. Signup with email should provide field "username" & "bio(optional)"  [DONE]
+10. there should be sign out or log out button in the home page for seemless experience.
+11. there is no default vector profile for none or empty user profile image.
+12. after the first successful login on the left menu clicking one(e.g. profile)
+    disappear the leftside & rihtside menu.
+13. on the successful signup is it good to redirect to login page?  [DONE]
+    instead of logged in and redirect to home page.  [Auto‑login after signup]
 
 # Quick fixes
 1. left side menus pages are not created yet  [DONE]

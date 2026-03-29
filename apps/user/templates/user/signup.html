@@ -1,9 +1,61 @@
-<div class="auth-container">
-    <h2>Sign Up</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Create Account</button>
-    </form>
-    <p>Already have an account? <a href="{% url 'user:sign_in' %}">Login here</a></p>
+{% extends "core/base.html" %}
+
+{% block title %}Sign up | MatuSunu{% endblock %}
+
+{% block content %}
+<div class="row vh-100 gx-0">
+    <div class="col-lg-6 d-none d-lg-flex align-items-center justify-content-center bg-white">
+        <h1 class="display-1 fw-bolder text-primary" style="font-size: 8rem; letter-spacing: -2px;">
+            MatuSunu
+        </h1>
+    </div>
+
+    <div class="col-lg-6 d-flex align-items-center justify-content-start p-5">
+        <div class="auth-box w-100" style="max-width: 600px;">
+
+            <div class="d-lg-none mb-4">
+                <h2 class="text-primary fw-bold">MatuSunu</h2>
+            </div>
+
+            <h1 class="display-3 fw-bolder mb-5" style="letter-spacing: -2px; line-height: 1.1;">
+                Join Today.
+            </h1>
+
+            <div class="auth-action-stack" style="max-width: 400px;">
+                <form method="post" class="mb-4">
+                    {% csrf_token %}
+
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-muted">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger small mt-1">
+                                    {{ field.errors|striptags }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+
+                    <button type="submit" class="btn btn-primary w-100 rounded-pill fw-bold py-2 mt-3">
+                        Create account
+                    </button>
+                </form>
+
+                <p class="text-muted mb-4" style="font-size: 0.7rem; line-height: 1.2;">
+                    By signing up, you agree to the <a href="#" class="text-decoration-none">Terms of Service</a> and
+                    <a href="#" class="text-decoration-none">Privacy Policy</a>, including
+                    <a href="#" class="text-decoration-none">Cookie Use.</a>
+                </p>
+
+                <div class="mt-4">
+                    <p class="fw-bold mb-3">Already have an account?</p>
+                    <a href="{% url 'user:sign_in' %}" class="btn btn-outline-primary w-100 rounded-pill fw-bold py-2">
+                        Sign in
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+{% endblock %}
