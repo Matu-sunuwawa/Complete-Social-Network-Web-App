@@ -25,7 +25,7 @@ User = get_user_model()
 
 class SignUpView(CreateView):
     form_class = EmailUserCreationForm
-    success_url = reverse_lazy('user:login')
+    success_url = reverse_lazy('user:sign_in')
     template_name = 'user/signup.html'
 
 class UserLoginView(LoginView):
