@@ -4,6 +4,12 @@ from .views import *
 app_name = 'user'
 
 urlpatterns = [
+    # Auth
+    path('signup/', SignUpView.as_view(), name='signup'),
+    path('login/', UserLoginView.as_view(), name='sign_in'),
+    path('logout/', UserLogoutView.as_view(), name='sign_out'),
+    path('auth/google/callback/', google_login_callback, name='google_callback'),
+
     path('profile/<str:username>/', ProfileDetailView.as_view(), name="profile_detail"),
     path('edit-profile/', ProfileUpdateView.as_view(), name="profile_update"),
     path('delete-profile/', ProfileDeleteView.as_view(), name="profile_delete"),

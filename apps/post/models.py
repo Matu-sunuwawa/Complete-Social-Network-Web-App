@@ -1,12 +1,11 @@
+from django.conf import settings
 from django.db import models
-
-from django.contrib.auth.models import User
 from apps.group.models import Group
 
 
 class Post(models.Model):
   user = models.ForeignKey(
-    User, on_delete=models.CASCADE, related_name="posts"
+    settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="posts"
   )
   group = models.ForeignKey(
     Group, on_delete=models.CASCADE, related_name="posts", null=True, blank=True, default=None
@@ -15,7 +14,7 @@ class Post(models.Model):
   image = models.ImageField(
     upload_to="post_images/", blank=True, null=True
   )
-  viewers = models.ManyToManyField(User, related_name='viewed_posts', blank=True)
+  viewers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='viewed_posts', blank=True)
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
 
@@ -38,12 +37,12 @@ class PostImage(models.Model):
     image = models.ImageField(upload_to="post_images/")
     created_at = models.DateTimeField(auto_now_add=True)
 
-    def __cl__(self):
+    def __str__(self):
         return f"Image for {self.post.id}"
 
 class Like(models.Model):
   user = models.ForeignKey(
-    User, on_delete=models.CASCADE, related_name="likes"
+    settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="likes"
   )
   post = models.ForeignKey(
     Post, on_delete=models.CASCADE, related_name="likes"
@@ -60,7 +59,7 @@ class Like(models.Model):
 
 class Comment(models.Model):
   user = models.ForeignKey(
-    User, on_delete=models.CASCADE, related_name="comments"
+    settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="comments"
   )
   post = models.ForeignKey(
     Post, on_delete=models.CASCADE, related_name="comments"

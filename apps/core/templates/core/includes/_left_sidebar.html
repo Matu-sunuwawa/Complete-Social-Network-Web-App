@@ -93,5 +93,14 @@
       </div>
 
     </div>
+
+    <div class="text-start px-3 mt-auto border-top pt-3">
+        <button hx-post="{% url 'user:sign_out' %}"
+                class="btn btn-link text-danger text-decoration-none d-flex align-items-center p-0"
+                style="font-size: 0.9rem;">
+            <img src="{% static 'assets/logout-svgrepo-com.svg' %}" class="menu-icon me-2" style="width: 20px;">
+            <span class="fw-bold">Logout</span>
+        </button>
+    </div>
   </div>
 </div>

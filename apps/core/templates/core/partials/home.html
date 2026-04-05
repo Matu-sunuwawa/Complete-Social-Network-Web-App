@@ -4,7 +4,16 @@
   <div id="post-{{ post.id }}" class="bg-white rounded-5 p-3 mt-4 post-card">
     <div class="d-flex justify-content-between py-2">
       <div class="d-flex align-items-center">
-        <img src="{% static 'assets/Group 8.png' %}" alt="">
+        {% if request.user.profile.profile_pic %}
+          <img src="{{ request.user.profile.profile_pic.url }}" class="profile-avatar" alt="Profile">
+        {% else %}
+          <div class="profile-avatar d-flex align-items-center justify-content-center bg-light rounded-circle mx-auto" style="width: 80px; height: 80px;">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+              </svg>
+          </div>
+        {% endif %}
         <div class="ps-3">
           <h3 class="h5 mb-0">{{post.user.username}}</h3>
           <p class="text-muted small mb-0">{{post.created_at}}</p>

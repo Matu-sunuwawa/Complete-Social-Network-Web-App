@@ -1,13 +1,17 @@
+from django.contrib.auth import get_user_model
 from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.contrib.auth.models import User
+
 from apps.group.models import Group
 from apps.post.models import Post
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+User = get_user_model()
 
 
-class HomeView(TemplateView):
+class HomeView(LoginRequiredMixin, TemplateView):
     template_name = 'core/home.html'
 
     def get_template_names(self):
@@ -67,6 +71,7 @@ class SearchView(TemplateView):
         if query:
             if search_type in ['all', 'users']:
                 context['users'] = User.objects.filter(
+                    Q(email__icontains=query) |
                     Q(username__icontains=query) |
                     Q(first_name__icontains=query) |
                     Q(last_name__icontains=query)

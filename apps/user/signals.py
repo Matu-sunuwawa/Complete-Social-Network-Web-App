@@ -1,12 +1,14 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.contrib.auth.models import User
+from django.conf import settings
 from .models import UserProfile
 
-@receiver(post_save, sender=User)
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
-  """create or update userprofile automatically when user created or updated"""
-  if created:
-    UserProfile.objects.create(user=instance)
-  else:
-    UserProfile.objects.get_or_create(user=instance)
+    if created:
+        UserProfile.objects.create(user=instance)
+    else:
+        if not hasattr(instance, 'profile'):
+            UserProfile.objects.create(user=instance)
+        else:
+            instance.profile.save()
